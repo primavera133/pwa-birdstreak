@@ -7,6 +7,7 @@ export const StartGame = () => {
     const d = new Date();
     const gameStartDate = startOfSecond(d);
     const streakSpan = useBirdStreakStore.getState().streakSpan;
+
     useBirdStreakStore.setState({
       gameStartDate,
       deadline: addMilliseconds(endOfSecond(d), streakSpan),

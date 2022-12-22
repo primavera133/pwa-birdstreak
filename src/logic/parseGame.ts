@@ -1,13 +1,21 @@
 import { parseISO } from "date-fns";
-import { Game, ParsedGame } from "../types";
+import { BirdStreakStore, UnparsedListItem } from "../types";
 
-export const parseGame = (game: Game): ParsedGame => {
+export const parseGame = (game: string): BirdStreakStore => {
+  const g = JSON.parse(game);
+
   return {
-    ...game,
-    gameStartDate: parseISO(game.gameStartDate),
-    lastPeriodEnded: game.lastPeriodEnded
-      ? parseISO(game.lastPeriodEnded)
+    ...g,
+    gameStartDate: parseISO(g.gameStartDate),
+    lastPeriodEnded: g.lastPeriodEnded
+      ? parseISO(g.lastPeriodEnded)
       : undefined,
-    deadLine: parseISO(game.deadLine),
+    deadline: parseISO(g.deadline),
+    list: g.list.map((unparsedlistItem: UnparsedListItem) => ({
+      ...unparsedlistItem,
+      date: parseISO(unparsedlistItem.date),
+      periodStart: parseISO(unparsedlistItem.periodStart),
+      periodEnd: parseISO(unparsedlistItem.periodEnd),
+    })),
   };
 };

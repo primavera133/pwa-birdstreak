@@ -5,22 +5,16 @@ export type ListItem = {
   periodEnd: Date;
 };
 
-export type Game = {
-  streakSpan: number;
-  gameStartDate: string;
-  lastPeriodEnded?: string;
-  deadLine: string;
-};
-
-export type ParsedGame = {
-  streakSpan: number;
-  gameStartDate: Date;
-  lastPeriodEnded?: Date;
-  deadLine: Date;
+export type UnparsedListItem = {
+  name: string;
+  date: string;
+  periodStart: string;
+  periodEnd: string;
 };
 
 export type BirdStreakStore = {
   streakSpan: number;
+  disabledIntervall: number;
   gameStartDate: Date | undefined;
   lastPeriodEnded: Date | undefined;
   deadline: Date | undefined;

@@ -8,13 +8,20 @@ import { validateInput } from "../../logic/validateInput";
 import { ListItem } from "../../types";
 export const LogForm = () => {
   const [name, setName] = useState("");
-  const { list, streakSpan } = useBirdStreakStore.getState();
+  const { streakSpan, disabledIntervall } = useBirdStreakStore.getState();
 
   const lastPeriodEnded = useBirdStreakStore((state) => state.lastPeriodEnded);
   const deadline = useBirdStreakStore((state) => state.deadline);
   const gameStartDate = useBirdStreakStore((state) => state.gameStartDate);
   const disabled = useBirdStreakStore((state) => state.disabled);
+  const list = useBirdStreakStore((state) => state.list);
 
+  // Persist store whenever list is updated
+  useEffect(() => {
+    localStorage.setItem("game", JSON.stringify(useBirdStreakStore.getState()));
+  }, [list]);
+
+  // recheck disabled state whenever relevant params change, for immediate effect on updates
   useEffect(() => {
     useBirdStreakStore.setState({
       disabled: checkDisabled(new Date(), {
@@ -25,6 +32,7 @@ export const LogForm = () => {
     });
   }, [lastPeriodEnded, gameStartDate, deadline]);
 
+  // recheck disabled state on regular intervals, since it depends on time
   useInterval(() => {
     useBirdStreakStore.setState({
       disabled: checkDisabled(new Date(), {
@@ -33,9 +41,9 @@ export const LogForm = () => {
         deadline,
       }),
     });
-  }, 1000);
+  }, disabledIntervall);
 
-  if (!gameStartDate) return null;
+  if (!gameStartDate) return null; // typechecking to keep ts happy
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

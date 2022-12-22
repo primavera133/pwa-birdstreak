@@ -5,7 +5,7 @@ describe("checkDisabled()", () => {
   const streakSpan = 60000;
   const gameStartDate = startOfDay(new Date());
 
-  it.only("should disble if last date is too recent", () => {
+  it("should disble if last date is too recent", () => {
     const lastPeriodEnded = addMilliseconds(new Date(), streakSpan * 0.5); // last period ended less than 1 streak ago
     const deadline = addMilliseconds(lastPeriodEnded, streakSpan);
 
