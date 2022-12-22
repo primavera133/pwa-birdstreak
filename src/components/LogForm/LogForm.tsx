@@ -1,6 +1,7 @@
 import { addMilliseconds } from "date-fns";
 import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
+import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { checkDisabled } from "../../logic/checkDisabled";
 import { getLastItem } from "../../logic/getLastItem";
@@ -18,7 +19,10 @@ export const LogForm = () => {
 
   // Persist store whenever list is updated
   useEffect(() => {
-    localStorage.setItem("game", JSON.stringify(useBirdStreakStore.getState()));
+    localStorage.setItem(
+      GAME.persistKey,
+      JSON.stringify(useBirdStreakStore.getState())
+    );
   }, [list]);
 
   // recheck disabled state whenever relevant params change, for immediate effect on updates
@@ -74,6 +78,7 @@ export const LogForm = () => {
       lastPeriodEnded: periodEnd,
       deadline: addMilliseconds(periodEnd, streakSpan),
     });
+    setName("");
   };
 
   return (

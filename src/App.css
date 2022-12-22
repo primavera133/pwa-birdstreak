@@ -11,6 +11,8 @@
 .footer {
   background-color: #00a5d0;
   padding: 12px 12px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .navbar {
