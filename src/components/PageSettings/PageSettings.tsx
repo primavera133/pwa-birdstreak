@@ -1,3 +1,4 @@
+import { Button, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { GAME } from "../../config/game";
 import {
@@ -6,10 +7,11 @@ import {
 } from "../../hooks/useBirdStreakStore";
 import { Content } from "../Content";
 import { Footer } from "../Footer";
+import { Header } from "../Header";
 import { Layout } from "../Layout";
 import { NavBar } from "../NavBar";
 
-export const Settings = () => {
+export const PageSettings = () => {
   const navigate = useNavigate();
   const deleteGame = () => {
     const legacyGames = localStorage.getItem(GAME.legacyGamesKey);
@@ -34,9 +36,11 @@ export const Settings = () => {
     <Layout>
       <NavBar />
       <Content>
-        <h2>Settings</h2>
-
-        <button onClick={handleClick}>Delete game</button>
+        <Header>Settings</Header>
+        <Text m="0 0 1rem">
+          You can delete the current game if you want to restart.
+        </Text>
+        <Button onClick={handleClick}>Delete game</Button>
       </Content>
       <Footer />
     </Layout>

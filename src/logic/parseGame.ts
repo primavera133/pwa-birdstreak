@@ -4,7 +4,7 @@ import { BirdStreakStore, UnparsedListItem } from "../types";
 export const parseGame = (game: string): BirdStreakStore => {
   const g = JSON.parse(game);
 
-  return {
+  const parsedGame = {
     ...g,
     gameStartDate: parseISO(g.gameStartDate),
     lastPeriodEnded: g.lastPeriodEnded
@@ -18,4 +18,14 @@ export const parseGame = (game: string): BirdStreakStore => {
       periodEnd: parseISO(unparsedlistItem.periodEnd),
     })),
   };
+
+  if (g.lastItem) {
+    parsedGame.lastItem = {
+      ...g.lastItem,
+      date: parseISO(g.lastItem.date),
+      periodStart: parseISO(g.lastItem.periodStart),
+      periodEnd: parseISO(g.lastItem.periodEnd),
+    };
+  }
+  return parsedGame;
 };

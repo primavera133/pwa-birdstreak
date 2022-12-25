@@ -14,10 +14,11 @@ export type UnparsedListItem = {
 
 export type BirdStreakStore = {
   streakSpan: number;
-  disabledIntervall: number;
-  gameStartDate: Date | undefined;
-  lastPeriodEnded: Date | undefined;
-  deadline: Date | undefined;
+  checkInterval: number;
+  gameStartDate?: Date;
+  lastPeriodEnded?: Date;
+  deadline?: Date;
   list: ListItem[];
-  disabled: boolean;
+  lastItem?: ListItem;
+  hasRehydrated: boolean;
 };

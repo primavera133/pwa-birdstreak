@@ -8,7 +8,7 @@
 //name of your app
 const CACHE_NAME = "pwa-birdstreak";
 //include all routes used in app
-const urlsToCache = ["/", "/list", "/logo.png"];
+const urlsToCache = ["/", "/list", "/logo.png", "/birdy1.webp", "/birdy2.webp", "/birdy3.webp", "/birdy4.webp", "/birdy5.webp", "/birdy6.webp"];
 
 // Install a service worker
 self.addEventListener("install", (event) => {
