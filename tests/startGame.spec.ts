@@ -1,14 +1,27 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 import { expect, test } from "@playwright/test";
-import { GAME } from "../src/config/game";
-import { parseGame } from "../src/logic/parseGame";
-import { BirdStreakStore } from "../src/types";
 
-test("starting a game", async ({ page, context }) => {
+test("start a game, log a bird", async ({ page, context }) => {
+  const fakeNow = new Date("January 1 2000 10:00:00").valueOf();
+
+  await page.addInitScript(`{
+  // Extend Date constructor to default to fakeNow
+  Date = class extends Date {
+    constructor(...args) {
+      if (args.length === 0) {
+        super(${fakeNow});
+      } else {
+        super(...args);
+      }
+    }
+  }
+  // Override Date.now() to start from fakeNow
+  const __DateNowOffset = ${fakeNow} - Date.now();
+  const __DateNow = Date.now;
+  Date.now = () => __DateNow() + __DateNowOffset;
+}`);
+
   await page.goto("http://localhost:3000/");
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Birdstreak/);
 
   // Expect a H2 element
   const getHeader1 = page.getByRole("heading", {
@@ -41,42 +54,8 @@ test("starting a game", async ({ page, context }) => {
     })
   ).toBeVisible();
 
-  // TODO: Test dates
-  //   const nextPeriod = page.getByTestId("next-period");
-  //   await expect(nextPeriod).toHaveText("Next period starts 28/12");
-
-  // Test persisted game in localStorage
-  const persistedState = context.storageState();
-  let game = (await persistedState).origins
-    .find((item) => item.origin === "http://localhost:3000")
-    ?.localStorage.find((item) => item.name === "game")?.value;
-
-  expect(game).toBeDefined();
-
-  const parsedGame: BirdStreakStore = parseGame(game ?? "");
-
-  expect(parsedGame.streakSpan).toBe(GAME.streakSpanMillis);
-  expect(parsedGame.checkInterval).toBe(GAME.checkInterval);
-  //   // TODO: test date values
-  expect(parsedGame.gameStartDate instanceof Date).toBeTruthy();
-  expect(parsedGame.lastPeriodEnded instanceof Date).toBeTruthy();
-  expect(parsedGame.nextPeriodStarts instanceof Date).toBeTruthy();
-  expect(parsedGame.deadline instanceof Date).toBeTruthy();
-
-  expect(parsedGame.list.length).toBe(1);
-  expect(parsedGame.list[0].date instanceof Date).toBeTruthy();
-  expect(parsedGame.list[0].name).toBe("Kråka");
-  expect(parsedGame.list[0].periodStart instanceof Date).toBeTruthy();
-  expect(parsedGame.list[0].periodEnd instanceof Date).toBeTruthy();
-
-  expect(parsedGame.lastItem?.name).toBe("Kråka");
-  expect(parsedGame.lastItem?.date instanceof Date).toBeTruthy();
-  expect(parsedGame.lastItem?.name).toBe("Kråka");
-  expect(parsedGame.lastItem?.periodStart instanceof Date).toBeTruthy();
-  expect(parsedGame.lastItem?.periodEnd instanceof Date).toBeTruthy();
-
-  // TODO: why is this value true?
-  expect(parsedGame.hasRehydrated).toBeTruthy();
+  const nextPeriod = page.getByTestId("next-period");
+  await expect(nextPeriod).toHaveText("Next period starts 3/1");
 
   const heading3List = page.getByRole("heading", { name: "Your list" });
   await expect(heading3List).toBeVisible();
@@ -87,6 +66,6 @@ test("starting a game", async ({ page, context }) => {
 
   const listItems = await page.getByTestId("list").locator("li").all();
   expect(listItems.length).toBe(1);
-  expect(page.getByTestId("listItemPeriod0")).toBeDefined(); // TODO: test date
+  await expect(page.getByTestId("listItemPeriod0")).toHaveText("1/1 - 2/1");
   await expect(page.getByTestId("listItemName0")).toHaveText("Kråka");
 });
