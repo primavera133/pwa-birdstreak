@@ -46,7 +46,9 @@ export const LogBird = () => {
             </Box>
 
             {nextPeriodStarts && (
-              <Box>Next period starts {format(nextPeriodStarts, "d/M")}</Box>
+              <Box data-testid="next-period">
+                Next period starts {format(nextPeriodStarts, "d/M")}
+              </Box>
             )}
           </CardBody>
         </Card>

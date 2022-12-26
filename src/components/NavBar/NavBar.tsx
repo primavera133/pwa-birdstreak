@@ -12,7 +12,7 @@ export const NavBar = () => {
   return (
     <Flex justify="space-between" bg="brand.bg" p=".75rem" data-name="navbar">
       <Flex align="center" data-name="title">
-        <Link to="/">
+        <Link to="/" data-testid="logoLink">
           <img src="logo.png" width={32} height={32} alt="logo" />
         </Link>
         <Link to="/">

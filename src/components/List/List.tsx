@@ -13,7 +13,7 @@ export const List = () => {
     alert("Edit a list item is yet to be developed");
   };
 
-  const p = list?.length === 1 ? " 1 period" : `{list.length} periods`;
+  const p = list?.length === 1 ? "1 period" : `{list.length} periods`;
 
   const streakSpan = useBirdStreakStore((state) => state.streakSpan);
 
@@ -24,12 +24,17 @@ export const List = () => {
 
   return (
     <>
-      <Text m="0 0 1rem">
+      <Text m="0 0 1rem" data-testid="so-far">
         So far you've locked in {p}, a total of {formatDuration(duration)}.
       </Text>
 
-      <Flex as="ul" className="List" flexDirection="column-reverse">
-        {list.map(({ name, periodStart, periodEnd }: ListItem) => (
+      <Flex
+        as="ul"
+        className="List"
+        flexDirection="column-reverse"
+        data-testid="list"
+      >
+        {list.map(({ name, periodStart, periodEnd }: ListItem, i: number) => (
           <Card
             as="li"
             key={name}
@@ -38,7 +43,11 @@ export const List = () => {
             m="0 0 1rem"
           >
             <Flex as={CardBody} align="center">
-              <Text fontSize="s" m="0 1rem 0 0">
+              <Text
+                fontSize="s"
+                m="0 1rem 0 0"
+                data-testid={`listItemPeriod${i}`}
+              >
                 {format(periodStart, "d/M")} - {format(periodEnd, "d/M")}
               </Text>
               <Text
@@ -46,6 +55,7 @@ export const List = () => {
                 fontSize="lg"
                 textTransform="capitalize"
                 flex="1"
+                data-testid={`listItemName${i}`}
               >
                 {name}
               </Text>
