@@ -15,7 +15,9 @@ export const LogBird = () => {
 
   const lastPeriodEnded = useBirdStreakStore((state) => state.lastPeriodEnded);
   const lastItem = useBirdStreakStore((state) => state.lastItem);
-  const deadline = useBirdStreakStore((state) => state.deadline);
+  const nextPeriodStarts = useBirdStreakStore(
+    (state) => state.nextPeriodStarts
+  );
 
   const checkNoLogsUntilNextPeriod = () => {
     if (!lastPeriodEnded) return;
@@ -31,8 +33,6 @@ export const LogBird = () => {
     checkNoLogsUntilNextPeriod();
   }, checkInterval);
 
-  if (!deadline) return null;
-
   return (
     <Content>
       {noLogsUntilNextPeriod ? (
@@ -45,7 +45,9 @@ export const LogBird = () => {
               <img src={getBirdy()} alt="birdy" width="200rem" />
             </Box>
 
-            <Box>Next period starts {format(deadline, "yyyy-MM-dd")}</Box>
+            {nextPeriodStarts && (
+              <Box>Next period starts {format(nextPeriodStarts, "d/M")}</Box>
+            )}
           </CardBody>
         </Card>
       ) : (
@@ -54,11 +56,17 @@ export const LogBird = () => {
           <LogForm />
         </>
       )}
-      <Heading as="h3" size="lg" m="0 0 1rem">
-        Your list
-      </Heading>
+      <>
+        {lastItem ? (
+          <>
+            <Heading as="h3" size="lg" m="0 0 1rem">
+              Your list
+            </Heading>
 
-      <List />
+            <List />
+          </>
+        ) : null}
+      </>
     </Content>
   );
 };

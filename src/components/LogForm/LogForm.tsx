@@ -15,17 +15,19 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { addMilliseconds, format } from "date-fns";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCrow } from "react-icons/fa";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBirdy } from "../../logic/getBirdy";
+import { normaliseName } from "../../logic/normaliseName";
 import { validateInput } from "../../logic/validateInput";
 import { ListItem } from "../../types";
 import { Header } from "../Header";
 
 export const LogForm = () => {
   const [name, setName] = useState("");
+  const [birdy] = useState(getBirdy());
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { streakSpan } = useBirdStreakStore.getState();
 
@@ -34,6 +36,13 @@ export const LogForm = () => {
   const gameStartDate = useBirdStreakStore((state) => state.gameStartDate);
   const list = useBirdStreakStore((state) => state.list);
   const lastItem = useBirdStreakStore((state) => state.lastItem);
+
+  // Normalize name
+  useEffect(() => {
+    if (!name) return;
+    const n = normaliseName(name);
+    if (name !== n) setName(n);
+  }, [name]);
 
   if (!gameStartDate) return null; // typechecking to keep ts happy
 
@@ -60,6 +69,7 @@ export const LogForm = () => {
       list: [...list, listItem],
       lastItem: listItem,
       lastPeriodEnded: periodEnd,
+      nextPeriodStarts: addMilliseconds(periodEnd, 1),
       deadline: addMilliseconds(periodEnd, streakSpan - 1),
     });
 
@@ -81,7 +91,7 @@ export const LogForm = () => {
     <form onSubmit={handleSubmit}>
       <Header>Log your next bird</Header>
       <Box m="1rem 0">
-        <img src={getBirdy()} alt="birdy" width="200rem" />
+        <img src={birdy} alt="birdy" width="200rem" />
       </Box>
 
       <List m="1rem" p="0">
@@ -117,8 +127,14 @@ export const LogForm = () => {
         placeholder="Crow, Heron, etc"
         m="0 0 1rem"
       />
-      <Button colorScheme="blue" size="lg" type="submit" disabled={!name}>
-        {name ? <Text>Lock in on {name}</Text> : <Text>Lock in</Text>}
+      <Button
+        colorScheme="blue"
+        size="lg"
+        type="submit"
+        disabled={!name}
+        m="0 0 5rem"
+      >
+        {name ? <Text>Lock in {name}</Text> : <Text>Lock in</Text>}
       </Button>
 
       <AlertDialog

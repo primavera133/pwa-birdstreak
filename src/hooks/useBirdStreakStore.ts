@@ -8,6 +8,7 @@ export const initialState = {
   checkInterval: GAME.checkInterval,
   gameStartDate: undefined,
   lastPeriodEnded: undefined,
+  nextPeriodStarts: undefined,
   deadline: undefined,
   list: [],
   lastItem: undefined,
