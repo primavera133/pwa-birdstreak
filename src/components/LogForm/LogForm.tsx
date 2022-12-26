@@ -8,13 +8,18 @@ import {
   Box,
   Button,
   Input,
+  List,
+  ListIcon,
+  ListItem as ListItemComponent,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { addMilliseconds, format } from "date-fns";
 import { useRef, useState } from "react";
+import { FaCrow } from "react-icons/fa";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
+import { getBirdy } from "../../logic/getBirdy";
 import { validateInput } from "../../logic/validateInput";
 import { ListItem } from "../../types";
 import { Header } from "../Header";
@@ -76,23 +81,25 @@ export const LogForm = () => {
     <form onSubmit={handleSubmit}>
       <Header>Log your next bird</Header>
       <Box m="1rem 0">
-        <img src="/bird1.webp" alt="birdy" width="200rem" />
+        <img src={getBirdy()} alt="birdy" width="200rem" />
       </Box>
 
-      <Box as="ul" m="1rem" p="0">
-        <li key="1">
-          <Text>
-            This period spans from {format(periodStart, "d/M")} to{" "}
-            {format(periodEnd, "d/M")}.
-          </Text>
-        </li>
-        <li key="2">
-          <Text>
-            When you have locked in on a bird you cannot add a new one until
-            next period starts.
-          </Text>
-        </li>
-      </Box>
+      <List m="1rem" p="0">
+        <ListItemComponent>
+          <ListIcon as={FaCrow} key="1" />
+          This period spans from {format(periodStart, "d/M")} to{" "}
+          {format(periodEnd, "d/M")}.
+        </ListItemComponent>
+        <ListItemComponent>
+          <ListIcon as={FaCrow} key="2" />
+          When you have locked in on a bird you cannot add a new one until next
+          period starts.
+        </ListItemComponent>
+        <ListItemComponent>
+          <ListIcon as={FaCrow} key="3" />
+          Log next bird before end of {format(periodEnd, "d/M")}
+        </ListItemComponent>
+      </List>
       <Box
         as="label"
         htmlFor="name"

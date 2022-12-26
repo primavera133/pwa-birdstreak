@@ -8,8 +8,6 @@ const colors = {
     infoText: "#333",
     infoBlock: "#fdf8d2",
     infoBLockText: "#333",
-    semiUrgent: "#f1da3b",
-    semiUrgentText: "#4b2f00",
     urgent: "#ff7f50",
     urgentText: "#333",
   },

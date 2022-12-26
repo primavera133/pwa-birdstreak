@@ -3,6 +3,7 @@ import { format, isBefore } from "date-fns";
 import { useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
+import { getBirdy } from "../../logic/getBirdy";
 import { Content } from "../Content";
 import { Deadline } from "../Deadline";
 import { List } from "../List";
@@ -41,7 +42,7 @@ export const LogBird = () => {
               You have logged {lastItem?.name} for this period.
             </Heading>
             <Box m="1rem 0">
-              <img src="/bird2.webp" alt="birdy" width="200rem" />
+              <img src={getBirdy()} alt="birdy" width="200rem" />
             </Box>
 
             <Box>Next period starts {format(deadline, "yyyy-MM-dd")}</Box>
