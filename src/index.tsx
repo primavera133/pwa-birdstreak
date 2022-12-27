@@ -1,9 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 // import "./index.css";
+import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC5K9i_qPPGgjSt4OdDUq7db7OyLqLeEaY",
+  authDomain: "birdstreak.firebaseapp.com",
+  projectId: "birdstreak",
+  storageBucket: "birdstreak.appspot.com",
+  messagingSenderId: "327211715170",
+  appId: "1:327211715170:web:e799e7b79a54c36e41df3b",
+  measurementId: "G-45DTZ6PG4J",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
