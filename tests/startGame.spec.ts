@@ -1,25 +1,11 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 import { expect, test } from "@playwright/test";
+import { setFakeNow } from "../testHelpers/setFakeNow";
 
 test("start a game, log a bird", async ({ page, context }) => {
+  // Set date
   const fakeNow = new Date("January 1 2000 10:00:00").valueOf();
-
-  await page.addInitScript(`{
-  // Extend Date constructor to default to fakeNow
-  Date = class extends Date {
-    constructor(...args) {
-      if (args.length === 0) {
-        super(${fakeNow});
-      } else {
-        super(...args);
-      }
-    }
-  }
-  // Override Date.now() to start from fakeNow
-  const __DateNowOffset = ${fakeNow} - Date.now();
-  const __DateNow = Date.now;
-  Date.now = () => __DateNow() + __DateNowOffset;
-}`);
+  await page.addInitScript(setFakeNow(fakeNow));
 
   await page.goto("http://localhost:3000/");
 
@@ -68,4 +54,31 @@ test("start a game, log a bird", async ({ page, context }) => {
   expect(listItems.length).toBe(1);
   await expect(page.getByTestId("listItemPeriod0")).toHaveText("1/1 - 2/1");
   await expect(page.getByTestId("listItemName0")).toHaveText("Kråka");
+
+  // Fast forward 2 days, form should re-appear
+  const fakeNow2 = new Date("January 3 2000 10:00:00").valueOf();
+  await page.addScriptTag({
+    content: setFakeNow(fakeNow2),
+  });
+
+  //   // TODO: investigate later
+  //   //   const soFar2 = page.getByTestId("so-far");
+  //   //   await expect(soFar2).toHaveText(
+  //   //     "So far you've locked in 1 period, a total of 2 days."
+  //   //   );
+  //   //   expect(soFar2).not.toBeDefined();
+
+  const header2again = page.getByRole("heading", { level: 2 });
+  await expect(header2again).toHaveText("Log your next bird");
+  await page.screenshot({ path: "screenshot.png", fullPage: true });
+
+  // Fast forward 3 days, show urgent deadline reminder
+  const fakeNow3 = new Date("January 4 2000 10:00:00").valueOf();
+  await page.addScriptTag({
+    content: setFakeNow(fakeNow3),
+  });
+
+  const deadline = page.getByText("Log next bird before end of today!");
+  await expect(deadline).toBeVisible();
+  await page.screenshot({ path: "screenshot2.png", fullPage: true });
 });

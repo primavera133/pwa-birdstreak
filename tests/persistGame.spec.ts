@@ -3,29 +3,14 @@ import { expect, test } from "@playwright/test";
 import { GAME } from "../src/config/game";
 import { parseGame } from "../src/logic/parseGame";
 import { BirdStreakStore } from "../src/types";
+import { setFakeNow } from "../testHelpers/setFakeNow";
 
 test("starting and persisting a game by logging a bird", async ({
   page,
   context,
 }) => {
   const fakeNow = new Date("January 1 2000 10:00:00").valueOf();
-
-  await page.addInitScript(`{
-  // Extend Date constructor to default to fakeNow
-  Date = class extends Date {
-    constructor(...args) {
-      if (args.length === 0) {
-        super(${fakeNow});
-      } else {
-        super(...args);
-      }
-    }
-  }
-  // Override Date.now() to start from fakeNow
-  const __DateNowOffset = ${fakeNow} - Date.now();
-  const __DateNow = Date.now;
-  Date.now = () => __DateNow() + __DateNowOffset;
-}`);
+  await page.addInitScript(setFakeNow(fakeNow));
 
   await page.goto("http://localhost:3000/");
 
@@ -49,7 +34,7 @@ test("starting and persisting a game by logging a bird", async ({
 
   expect(parsedGame.streakSpan).toBe(GAME.streakSpanMillis);
   expect(parsedGame.checkInterval).toBe(GAME.checkInterval);
-  //   // TODO: test date values
+
   expect(parsedGame.gameStartDate instanceof Date).toBeTruthy();
   expect(parsedGame.gameStartDate).toStrictEqual(
     new Date("1999-12-31T23:00:00.000Z")
