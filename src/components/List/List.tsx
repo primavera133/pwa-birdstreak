@@ -9,9 +9,9 @@ export const List = () => {
   const list = useBirdStreakStore((state) => state.list);
 
   // TODO: edit
-  const handleEdit = () => {
-    alert("Edit a list item is yet to be developed");
-  };
+  // const handleEdit = () => {
+  //   alert("Edit a list item is yet to be developed");
+  // };
 
   const p = list?.length === 1 ? "1 period" : `{list.length} periods`;
 
