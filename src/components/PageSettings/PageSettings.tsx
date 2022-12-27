@@ -28,7 +28,7 @@ import { Header } from "../Header";
 import { Layout } from "../Layout";
 import { NavBar } from "../NavBar";
 
-import { FaExclamationTriangle, FaFileExport } from "react-icons/fa";
+import { FaCog, FaExclamationTriangle, FaFileExport } from "react-icons/fa";
 
 export const PageSettings = () => {
   const navigate = useNavigate();
@@ -93,7 +93,11 @@ export const PageSettings = () => {
     <Layout>
       <NavBar />
       <Content>
-        <Header>Settings</Header>
+        <Flex align="center">
+          <Icon as={FaCog} m="0 .5rem 1rem 0" boxSize="6" />
+          <Header>Settings</Header>
+        </Flex>
+
         <Card m="0 0 1rem">
           <CardBody>
             <Flex align="center" m="0 0 1rem">
