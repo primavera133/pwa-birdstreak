@@ -21,7 +21,7 @@ test("start a game, log a bird", async ({ page, context }) => {
   Date.now = () => __DateNow() + __DateNowOffset;
 }`);
 
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   // Expect a H2 element
   const getHeader1 = page.getByRole("heading", {

@@ -27,7 +27,7 @@ test("starting and persisting a game by logging a bird", async ({
   Date.now = () => __DateNow() + __DateNowOffset;
 }`);
 
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   await page.getByRole("button", { name: "Start a new streak" }).click();
 

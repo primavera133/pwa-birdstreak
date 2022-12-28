@@ -2,14 +2,14 @@
 import { expect, test } from "@playwright/test";
 
 test("homepage has title", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/Birdstreak/);
 });
 
 test("navbar has logo", async ({ page }) => {
-  await page.goto("http://localhost:3000");
+  await page.goto("/");
 
   // create a locator for link around Logo
   const linkedLogo = page.getByTestId("logoLink");
@@ -19,7 +19,7 @@ test("navbar has logo", async ({ page }) => {
 });
 
 test("navbar has header", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   // Expect a H1 element
   const getHeader1 = page.getByRole("heading", {
