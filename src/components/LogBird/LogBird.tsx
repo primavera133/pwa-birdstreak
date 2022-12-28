@@ -38,7 +38,6 @@ export const LogBird = () => {
   if (!deadline) return null;
 
   const isTooLate = isBefore(deadline, new Date());
-  console.log("isTooLate", isTooLate);
 
   return (
     <Content>
