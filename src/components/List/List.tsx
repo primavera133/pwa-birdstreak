@@ -32,11 +32,12 @@ export const List = () => {
   const [editPeriod, setEditPeriod] =
     useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
   const list = useBirdStreakStore((state) => state.list);
+  const lastItem = useBirdStreakStore((state) => state.lastItem);
 
-  const handleEdit = (key: string) => {
+  const handleEdit = (key: string, i: number) => {
     const listItem = list.find((item) => item.key === key);
     if (!listItem) return;
-    if (!listItem.isNamed) {
+    if (!listItem.isNamed || i === 0) {
       setEditPeriod(listItem);
       onEditOpen();
     }
@@ -82,7 +83,7 @@ export const List = () => {
                 bg={isNamed ? "brand.info" : "brand.infoBlock"}
                 key={key}
                 m="0 0 1rem"
-                onClick={() => handleEdit(key)}
+                onClick={() => handleEdit(key, i)}
               >
                 <Flex as={CardBody} align="center">
                   <Text
@@ -101,7 +102,7 @@ export const List = () => {
                   >
                     {name}
                   </Text>
-                  {!isNamed && <Icon as={FaRegEdit} />}
+                  {!isNamed || (i === 0 && <Icon as={FaRegEdit} />)}
                 </Flex>
               </Card>
             )

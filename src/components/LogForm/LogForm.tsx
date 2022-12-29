@@ -57,6 +57,7 @@ export const LogForm = ({
   useEffect(() => {
     if (periodKey) {
       const listItem = list.find((item) => item.key === periodKey);
+      setName(listItem?.name || "");
       setPeriod(listItem);
     }
   }, [periodKey, list]);
