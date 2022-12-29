@@ -11,7 +11,14 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { addMilliseconds, format } from "date-fns";
+import {
+  addDays,
+  addMilliseconds,
+  endOfDay,
+  format,
+  startOfDay,
+} from "date-fns";
+import { subDays } from "date-fns/esm";
 import { useEffect, useRef, useState } from "react";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
@@ -38,7 +45,7 @@ export const LogForm = ({
 
   const gameStartDate = useBirdStreakStore((state) => state.gameStartDate);
   const list = useBirdStreakStore((state) => state.list);
-  const lastItem = useBirdStreakStore((state) => state.lastItem);
+  const periodStart = useBirdStreakStore((state) => state.periodStart);
 
   // Normalize name
   useEffect(() => {
@@ -55,24 +62,21 @@ export const LogForm = ({
   }, [periodKey, list]);
 
   if (!gameStartDate) return null; // typechecking to keep date-fns happy
+  if (!periodStart) return null; // typechecking to keep date-fns happy
 
-  const periodStart = period
-    ? period.periodStart
-    : lastItem
-    ? lastItem.periodEnd
-    : gameStartDate;
+  const currentPeriodStart = period ? period.periodStart : periodStart;
 
-  const periodEnd = period
+  const currentPeriodEnd = period
     ? period.periodEnd
-    : addMilliseconds(periodStart, streakSpan - 1);
+    : endOfDay(subDays(addMilliseconds(currentPeriodStart, streakSpan), 1));
 
   const handleLockIn = async () => {
-    const listItem: ListItem = {
+    const listItem = {
       key: period ? period.key : `period${list.length + 1}`,
       name,
       date: new Date(),
-      periodStart,
-      periodEnd,
+      periodStart: currentPeriodStart,
+      periodEnd: currentPeriodEnd,
       isNamed: true,
     };
 
@@ -86,21 +90,18 @@ export const LogForm = ({
         })
       : [...list, listItem];
 
-    const lastItem = period ? newList[newList.length - 1] : listItem;
+    const lastItem = newList[newList.length - 1];
 
-    const nextPeriodStarts = lastItem
-      ? addMilliseconds(lastItem.periodEnd, 1)
-      : addMilliseconds(listItem.periodEnd, 1);
+    const nextPeriodStarts = startOfDay(addDays(lastItem.periodEnd, 1));
 
-    const deadline = lastItem
-      ? addMilliseconds(lastItem.periodEnd, streakSpan - 1)
-      : addMilliseconds(listItem.periodEnd, streakSpan - 1);
+    const deadline = addMilliseconds(lastItem.periodEnd, streakSpan);
 
     // update app state
     useBirdStreakStore.setState({
       list: newList,
       lastItem,
-      lastPeriodEnded: periodEnd,
+      lastPeriodEnded: lastItem.periodEnd,
+      periodStart,
       nextPeriodStarts,
       deadline,
     });

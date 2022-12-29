@@ -22,7 +22,7 @@ describe("getBackfill()", () => {
 
       expect(result[0].key).toBe("period1");
       expect(result[0].name).toBe("");
-      expect(result[0].date).toEqual(result[0].periodStart);
+      expect(result[0].date).toBeUndefined();
       expect(result[0].periodEnd).toEqual(
         addMilliseconds(result[0].periodStart, streakSpan - 1)
       );

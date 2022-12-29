@@ -1,7 +1,7 @@
 export type ListItem = {
   key: string;
   name: string;
-  date: Date;
+  date?: Date;
   periodStart: Date;
   periodEnd: Date;
   isNamed: boolean;
@@ -20,6 +20,7 @@ export type BirdStreakStore = {
   gameStartDate?: Date;
   lastPeriodEnded?: Date;
   nextPeriodStarts?: Date;
+  periodStart?: Date;
   deadline?: Date;
   list: ListItem[];
   lastItem?: ListItem;

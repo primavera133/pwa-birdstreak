@@ -13,6 +13,7 @@ export const parseGame = (game: string): BirdStreakStore => {
     nextPeriodStarts: g.nextPeriodStarts
       ? parseISO(g.nextPeriodStarts)
       : undefined,
+    periodStart: parseISO(g.periodStart),
     deadline: parseISO(g.deadline),
     list: g.list.map((unparsedlistItem: UnparsedListItem) => ({
       ...unparsedlistItem,

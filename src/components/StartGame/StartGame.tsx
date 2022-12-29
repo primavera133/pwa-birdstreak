@@ -25,6 +25,7 @@ export const StartGame = () => {
     const gameStartDate = startOfDay(startDate);
 
     const periods = getBackfill(startDate, new Date(), streakSpan);
+
     const currentPeriod = periods.pop();
 
     if (!currentPeriod) {
@@ -34,6 +35,7 @@ export const StartGame = () => {
 
     useBirdStreakStore.setState({
       gameStartDate,
+      periodStart: currentPeriod.periodStart,
       deadline: currentPeriod.periodEnd,
       lastPeriodEnded: periods.length
         ? periods[periods.length - 1].periodEnd

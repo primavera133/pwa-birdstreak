@@ -64,7 +64,7 @@ test("starting and persisting a game by logging a bird", async ({
   );
   expect(parsedGame.deadline instanceof Date).toBeTruthy();
   expect(parsedGame.deadline).toStrictEqual(
-    new Date("2000-01-04T22:59:59.998Z") // TODO: fix backing of 1 millisec each period
+    new Date("2000-01-04T22:59:59.999Z")
   );
 
   expect(parsedGame.list.length).toBe(1);

@@ -8,7 +8,7 @@ import {
   ListItem as ListItemComponent,
   Text,
 } from "@chakra-ui/react";
-import { addMilliseconds, format, isBefore } from "date-fns";
+import { format, isBefore } from "date-fns";
 import { useState } from "react";
 import { FaCrow } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -23,14 +23,14 @@ import { LogForm } from "../LogForm";
 
 export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
-  const { checkInterval, gameStartDate, streakSpan } =
-    useBirdStreakStore.getState();
+  const { checkInterval } = useBirdStreakStore.getState();
 
   const [birdy] = useState(getBirdy());
 
   const lastPeriodEnded = useBirdStreakStore((state) => state.lastPeriodEnded);
   const lastItem = useBirdStreakStore((state) => state.lastItem);
   const deadline = useBirdStreakStore((state) => state.deadline);
+  const periodStart = useBirdStreakStore((state) => state.periodStart);
   const nextPeriodStarts = useBirdStreakStore(
     (state) => state.nextPeriodStarts
   );
@@ -50,11 +50,6 @@ export const LogBird = () => {
   }, checkInterval);
 
   if (!deadline) return null;
-
-  const periodStart = lastItem ? lastItem.periodEnd : gameStartDate;
-  const periodEnd = periodStart
-    ? addMilliseconds(periodStart, streakSpan - 1)
-    : null;
 
   const isTooLate = isBefore(deadline, new Date());
 
@@ -101,7 +96,7 @@ export const LogBird = () => {
         </Card>
       ) : (
         <>
-          {!isTooLate && !!periodStart && !!periodEnd && (
+          {!isTooLate && !!periodStart && (
             <>
               <Deadline />
               <Header>Log your next bird</Header>
@@ -113,7 +108,7 @@ export const LogBird = () => {
                 <ListItemComponent>
                   <ListIcon as={FaCrow} key="1" />
                   This period spans from {format(periodStart, "d/M")} to{" "}
-                  {format(periodEnd, "d/M")}.
+                  {format(deadline, "d/M")}.
                 </ListItemComponent>
                 <ListItemComponent>
                   <ListIcon as={FaCrow} key="2" />
@@ -122,7 +117,7 @@ export const LogBird = () => {
                 </ListItemComponent>
                 <ListItemComponent>
                   <ListIcon as={FaCrow} key="3" />
-                  Log next bird before end of {format(periodEnd, "d/M")}
+                  Log next bird before end of {format(deadline, "d/M")}
                 </ListItemComponent>
               </ListComponent>
 

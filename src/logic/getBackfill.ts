@@ -15,7 +15,7 @@ export const getBackfill = (
   const periodInDays = streakSpan / (1000 * 60 * 60 * 24);
   const amountOfListItems = Math.floor(diff / streakSpan);
 
-  const list = [];
+  const list: ListItem[] = [];
   for (let i = 0; i <= amountOfListItems; i++) {
     const itemStartDate = startOfDay(addDays(startDate, i * periodInDays));
     const itemEndDate = subMilliseconds(
@@ -25,7 +25,7 @@ export const getBackfill = (
     list.push({
       key: `period${i + 1}`,
       name: "", // cannot use undefined, because JSON.stringify removes it
-      date: itemStartDate,
+      date: undefined,
       periodStart: itemStartDate,
       periodEnd: itemEndDate,
       isNamed: false,

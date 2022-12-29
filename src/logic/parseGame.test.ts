@@ -22,6 +22,7 @@ describe("parseGame()", () => {
     expect(result.gameStartDate instanceof Date).toBe(true);
     expect(result.lastPeriodEnded instanceof Date).toBe(true);
     expect(result.nextPeriodStarts instanceof Date).toBe(true);
+    expect(result.periodStart instanceof Date).toBe(true);
     expect(result.list[0].date instanceof Date).toBe(true);
     expect(result.list[0].periodStart instanceof Date).toBe(true);
     expect(result.list[0].periodEnd instanceof Date).toBe(true);
