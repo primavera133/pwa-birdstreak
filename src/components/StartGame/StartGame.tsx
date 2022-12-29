@@ -1,30 +1,47 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
 
 import {
-  addMilliseconds,
   formatDuration,
   intervalToDuration,
   startOfDay,
+  startOfYear,
+  subMonths,
 } from "date-fns";
+import { useState } from "react";
 import { GAME } from "../../config/game";
 
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { FaCrow } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
+import { getBackfill } from "../../logic/getBackfill";
 import { Content } from "../Content";
 import { Header } from "../Header";
 
 export const StartGame = () => {
+  const [startDate, setStartDate] = useState(new Date());
   const { streakSpan } = useBirdStreakStore.getState();
 
   const handleClick = () => {
-    const d = new Date();
-    const gameStartDate = startOfDay(d);
-    const streakSpan = useBirdStreakStore.getState().streakSpan;
+    const gameStartDate = startOfDay(startDate);
+
+    const periods = getBackfill(startDate, new Date(), streakSpan);
+    const currentPeriod = periods.pop();
+
+    if (!currentPeriod) {
+      throw new Error("wtf");
+    }
+    const lastItem = periods.length ? periods[periods.length - 1] : undefined;
 
     useBirdStreakStore.setState({
       gameStartDate,
-      deadline: addMilliseconds(startOfDay(d), streakSpan - 1),
-      lastPeriodEnded: gameStartDate,
+      deadline: currentPeriod.periodEnd,
+      lastPeriodEnded: periods.length
+        ? periods[periods.length - 1].periodEnd
+        : gameStartDate,
+      list: periods,
+      lastItem,
     });
+
     // persist total state
     localStorage.setItem(
       GAME.persistKey,
@@ -47,6 +64,38 @@ export const StartGame = () => {
         Welcome to start a streak game. It will start the day you press this
         button. Every period is {formatted}
       </Text>
+      <Box m="0 0 1rem">
+        <Box as="label" htmlFor="myDdatePicker">
+          <Text as="span" fontWeight="bold" fontSize="xl">
+            Startdatum
+          </Text>
+        </Box>
+        <Box m="0 0 .25rem 0">
+          <SingleDatepicker
+            data-x="x"
+            id="myDdatePicker"
+            name="date-input"
+            date={startDate}
+            maxDate={new Date()}
+            minDate={
+              startOfYear(new Date()) < subMonths(new Date(), 1)
+                ? startOfYear(new Date())
+                : subMonths(new Date(), 1)
+            }
+            onDateChange={setStartDate}
+            configs={{
+              firstDayOfWeek: 1,
+            }}
+          />
+        </Box>
+        <Flex align="center">
+          <Icon as={FaCrow} m="0 .25rem 0" />
+          <Text as="span">
+            You can start the game on today or a previous date (and backfill
+            your sightings).
+          </Text>
+        </Flex>
+      </Box>
       <Button colorScheme="blue" onClick={handleClick} size="lg">
         Start a new streak
       </Button>

@@ -8,26 +8,29 @@ import {
   Box,
   Button,
   Input,
-  List,
-  ListIcon,
-  ListItem as ListItemComponent,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { addMilliseconds, format } from "date-fns";
 import { useEffect, useRef, useState } from "react";
-import { FaCrow } from "react-icons/fa";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
-import { getBirdy } from "../../logic/getBirdy";
 import { normaliseName } from "../../logic/normaliseName";
 import { validateInput } from "../../logic/validateInput";
 import { ListItem } from "../../types";
-import { Header } from "../Header";
 
-export const LogForm = () => {
+export const LogForm = ({
+  periodKey,
+  onEditClose,
+}: {
+  periodKey?: string;
+  onEditClose?: () => void;
+}) => {
   const [name, setName] = useState("");
-  const [birdy] = useState(getBirdy());
+  const [nameError, setNameError] = useState("");
+  const [period, setPeriod] =
+    useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { streakSpan } = useBirdStreakStore.getState();
 
@@ -44,78 +47,112 @@ export const LogForm = () => {
     if (name !== n) setName(n);
   }, [name]);
 
-  if (!gameStartDate) return null; // typechecking to keep ts happy
+  useEffect(() => {
+    if (periodKey) {
+      const listItem = list.find((item) => item.key === periodKey);
+      setPeriod(listItem);
+    }
+  }, [periodKey, list]);
 
-  const periodStart = lastItem ? lastItem.periodEnd : gameStartDate;
+  if (!gameStartDate) return null; // typechecking to keep date-fns happy
 
-  const periodEnd = addMilliseconds(periodStart, streakSpan - 1);
+  const periodStart = period
+    ? period.periodStart
+    : lastItem
+    ? lastItem.periodEnd
+    : gameStartDate;
+
+  const periodEnd = period
+    ? period.periodEnd
+    : addMilliseconds(periodStart, streakSpan - 1);
 
   const handleLockIn = async () => {
-    const valid = validateInput(name, list);
-    if (!valid) {
-      alert("bird name is already logged");
-      return;
-    }
-
     const listItem: ListItem = {
+      key: period ? period.key : `period${list.length + 1}`,
       name,
       date: new Date(),
       periodStart,
       periodEnd,
+      isNamed: true,
     };
+
+    const newList = period
+      ? list.map((item) => {
+          if (item.key === period.key) {
+            return listItem;
+          } else {
+            return item;
+          }
+        })
+      : [...list, listItem];
+
+    const lastItem = period ? newList[newList.length - 1] : listItem;
+
+    const nextPeriodStarts = lastItem
+      ? addMilliseconds(lastItem.periodEnd, 1)
+      : addMilliseconds(listItem.periodEnd, 1);
+
+    const deadline = lastItem
+      ? addMilliseconds(lastItem.periodEnd, streakSpan - 1)
+      : addMilliseconds(listItem.periodEnd, streakSpan - 1);
 
     // update app state
     useBirdStreakStore.setState({
-      list: [...list, listItem],
-      lastItem: listItem,
+      list: newList,
+      lastItem,
       lastPeriodEnded: periodEnd,
-      nextPeriodStarts: addMilliseconds(periodEnd, 1),
-      deadline: addMilliseconds(periodEnd, streakSpan - 1),
+      nextPeriodStarts,
+      deadline,
     });
 
-    setName(""); // reset input
+    // reset input and errors
+    setName("");
+    setNameError("");
+    // setPeriod(undefined);
 
     // persist total state
     localStorage.setItem(
       GAME.persistKey,
       JSON.stringify(useBirdStreakStore.getState())
     );
+
+    handleClose();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const valid = validateInput(name, list);
+    if (!valid) {
+      const item = list.find((item) => item.name === name);
+      if (item) {
+        setNameError(
+          `You logged ${name} for ${format(item.periodStart, "d/M")} - ${format(
+            item.periodEnd,
+            "d/M"
+          )} already.`
+        );
+      }
+      return;
+    }
+
     onOpen();
+  };
+
+  const handleClose = () => {
+    onClose();
+    if (onEditClose) onEditClose();
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Header>Log your next bird</Header>
-      <Box m="1rem 0">
-        <img src={birdy} alt="birdy" width="200rem" />
-      </Box>
-
-      <List m="1rem" p="0">
-        <ListItemComponent>
-          <ListIcon as={FaCrow} key="1" />
-          This period spans from {format(periodStart, "d/M")} to{" "}
-          {format(periodEnd, "d/M")}.
-        </ListItemComponent>
-        <ListItemComponent>
-          <ListIcon as={FaCrow} key="2" />
-          When you have locked in on a bird you cannot add a new one until next
-          period starts.
-        </ListItemComponent>
-        <ListItemComponent>
-          <ListIcon as={FaCrow} key="3" />
-          Log next bird before end of {format(periodEnd, "d/M")}
-        </ListItemComponent>
-      </List>
       <Box
         as="label"
         htmlFor="name"
         fontWeight="bold"
         fontSize="xl"
         m="0 0 1rem"
+        display="inline-block"
       >
         Bird name to log
       </Box>
@@ -125,8 +162,11 @@ export const LogForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Crow, Heron, etc"
-        m="0 0 1rem"
+        m="0 0 .5rem"
       />
+      <Text color="brand.urgent" m="0 0 1rem">
+        {nameError}
+      </Text>
       <Button
         colorScheme="blue"
         size="lg"
@@ -140,7 +180,7 @@ export const LogForm = () => {
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
@@ -153,7 +193,7 @@ export const LogForm = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button ref={cancelRef} onClick={handleClose}>
                 Cancel
               </Button>
               <Button colorScheme="red" onClick={handleLockIn} ml={3}>
