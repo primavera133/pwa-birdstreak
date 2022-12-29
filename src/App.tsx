@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import "./App.css";
 import { MyList } from "./components/MyList";
-import { PageCredits } from "./components/PageCredits";
+import { PageAbout } from "./components/PageAbout";
 import { PageHome } from "./components/PageHome";
 import { PageSettings } from "./components/PageSettings";
 import { GAME } from "./config/game";
@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<PageHome />} />
           <Route path="/list" element={<MyList />} />
           <Route path="/settings" element={<PageSettings />} />
-          <Route path="/credits" element={<PageCredits />} />
+          <Route path="/about" element={<PageAbout />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

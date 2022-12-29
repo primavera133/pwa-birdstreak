@@ -2,7 +2,9 @@ import {
   Box,
   Card,
   CardBody,
+  Flex,
   Heading,
+  Icon,
   List as ListComponent,
   ListIcon,
   ListItem as ListItemComponent,
@@ -10,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { format, isBefore } from "date-fns";
 import { useState } from "react";
-import { FaCrow } from "react-icons/fa";
+import { FaCrow, FaExclamation } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
@@ -25,12 +27,13 @@ export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
   const { checkInterval } = useBirdStreakStore.getState();
 
-  const [birdy] = useState(getBirdy());
+  const birdy = getBirdy();
 
   const lastPeriodEnded = useBirdStreakStore((state) => state.lastPeriodEnded);
   const lastItem = useBirdStreakStore((state) => state.lastItem);
   const deadline = useBirdStreakStore((state) => state.deadline);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
+  const list = useBirdStreakStore((state) => state.list);
   const nextPeriodStarts = useBirdStreakStore(
     (state) => state.nextPeriodStarts
   );
@@ -52,6 +55,8 @@ export const LogBird = () => {
   if (!deadline) return null;
 
   const isTooLate = isBefore(deadline, new Date());
+
+  const hasUnNamedPeriods = list.filter((item) => !item.isNamed).length;
 
   return (
     <Content>
@@ -88,9 +93,19 @@ export const LogBird = () => {
             </Box>
 
             {nextPeriodStarts && (
-              <Box data-testid="next-period">
-                Next period starts {format(nextPeriodStarts, "d/M")}
-              </Box>
+              <>
+                <Text data-testid="next-period">
+                  Next period starts {format(nextPeriodStarts, "d/M")}
+                </Text>
+                {hasUnNamedPeriods && (
+                  <Flex align="center">
+                    <Icon as={FaExclamation} />
+                    <Text>
+                      You still have {hasUnNamedPeriods} older periods to log!
+                    </Text>
+                  </Flex>
+                )}
+              </>
             )}
           </CardBody>
         </Card>

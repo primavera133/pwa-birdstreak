@@ -13,7 +13,7 @@ import { Header } from "../Header";
 import { Layout } from "../Layout";
 import { NavBar } from "../NavBar";
 
-export const PageCredits = () => {
+export const PageAbout = () => {
   return (
     <Layout>
       <NavBar />
@@ -35,8 +35,27 @@ export const PageCredits = () => {
         <Box>
           <Flex align="center">
             <Icon as={FaStar} m="0 .5rem 1rem 0" boxSize="6" />
-            <Header>Credits</Header>
+            <Header>About</Header>
           </Flex>
+          <Text m="0 0 1rem">
+            Game coded by Jonas Myrenås. Report bugs to{" "}
+            <Text
+              as="a"
+              textDecoration="underline"
+              href="mailto:birdstreak@gmail.com"
+            >
+              birdstreak@gmail.com
+            </Text>{" "}
+            or log an issue in{" "}
+            <Text
+              as="a"
+              textDecoration="underline"
+              href="https://github.com/primavera133/pwa-birdstreak"
+              target="_blank"
+            >
+              Github
+            </Text>
+          </Text>
           <Text m="0 0 1rem">
             Bird logo and illustrations from{" "}
             <Text

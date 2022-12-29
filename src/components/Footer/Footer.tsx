@@ -12,7 +12,7 @@ export const Footer = () => (
     data-name="footer"
   >
     <Box color="white">
-      <Box as={Link} to="/credits" m="0 1rem 0 0">
+      <Box as={Link} to="/about" m="0 1rem 0 0">
         <Icon as={FaStar}>credits</Icon>
       </Box>
       <Box as={Link} to="/settings" m="0 1rem 0 0">
