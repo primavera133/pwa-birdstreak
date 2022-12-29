@@ -70,40 +70,42 @@ export const List = () => {
       </Text>
 
       <ListComponent as="ul" data-testid="list">
-        {list.map(
-          (
-            { key, name, periodStart, periodEnd, isNamed }: ListItem,
-            i: number
-          ) => (
-            <Card
-              as={ListItemComponent}
-              bg={isNamed ? "brand.info" : "brand.infoBlock"}
-              key={key}
-              m="0 0 1rem"
-              onClick={() => handleEdit(key)}
-            >
-              <Flex as={CardBody} align="center">
-                <Text
-                  fontSize="s"
-                  m="0 1rem 0 0"
-                  data-testid={`listItemPeriod${i}`}
-                >
-                  {format(periodStart, "d/M")} - {format(periodEnd, "d/M")}
-                </Text>
-                <Text
-                  fontWeight="bold"
-                  fontSize="lg"
-                  textTransform="capitalize"
-                  flex="1"
-                  data-testid={`listItemName${i}`}
-                >
-                  {name}
-                </Text>
-                {!isNamed && <Icon as={FaRegEdit} />}
-              </Flex>
-            </Card>
-          )
-        )}
+        {[...list]
+          .reverse()
+          .map(
+            (
+              { key, name, periodStart, periodEnd, isNamed }: ListItem,
+              i: number
+            ) => (
+              <Card
+                as={ListItemComponent}
+                bg={isNamed ? "brand.info" : "brand.infoBlock"}
+                key={key}
+                m="0 0 1rem"
+                onClick={() => handleEdit(key)}
+              >
+                <Flex as={CardBody} align="center">
+                  <Text
+                    fontSize="s"
+                    m="0 1rem 0 0"
+                    data-testid={`listItemPeriod${i}`}
+                  >
+                    {format(periodStart, "d/M")} - {format(periodEnd, "d/M")}
+                  </Text>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="lg"
+                    textTransform="capitalize"
+                    flex="1"
+                    data-testid={`listItemName${i}`}
+                  >
+                    {name}
+                  </Text>
+                  {!isNamed && <Icon as={FaRegEdit} />}
+                </Flex>
+              </Card>
+            )
+          )}
       </ListComponent>
       <Modal isOpen={isEditOpen} onClose={onEditClose}>
         <ModalOverlay />
