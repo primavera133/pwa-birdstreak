@@ -4,9 +4,11 @@ describe("validateInput", () => {
   it("should invalidate on duplicates", () => {
     const expectedInput = "aaa";
     const irrelevantProps = {
+      key: "periodx",
       date: new Date(),
       periodStart: new Date(),
       periodEnd: new Date(),
+      isNamed: true,
     };
 
     const list1: ListItem[] = [

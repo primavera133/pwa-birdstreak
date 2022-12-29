@@ -1,8 +1,10 @@
 export type ListItem = {
+  key: string;
   name: string;
   date: Date;
   periodStart: Date;
   periodEnd: Date;
+  isNamed: boolean;
 };
 
 export type UnparsedListItem = {

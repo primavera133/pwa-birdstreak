@@ -61,7 +61,7 @@ test("start a game, log a bird", async ({ page, context }) => {
   await expect(heading3List).toBeVisible();
   const soFar = page.getByTestId("so-far");
   await expect(soFar).toHaveText(
-    "So far you've locked in 1 period, a total of 2 days."
+    "So far you've locked in 1 period, over a total of 2 days."
   );
 
   const listItems = await page.getByTestId("list").locator("li").all();

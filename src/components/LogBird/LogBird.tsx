@@ -1,18 +1,32 @@
-import { Box, Card, CardBody, Heading, Text } from "@chakra-ui/react";
-import { format, isBefore } from "date-fns";
+import {
+  Box,
+  Card,
+  CardBody,
+  Heading,
+  List as ListComponent,
+  ListIcon,
+  ListItem as ListItemComponent,
+  Text,
+} from "@chakra-ui/react";
+import { addMilliseconds, format, isBefore } from "date-fns";
 import { useState } from "react";
+import { FaCrow } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBirdy } from "../../logic/getBirdy";
 import { Content } from "../Content";
 import { Deadline } from "../Deadline";
+import { Header } from "../Header";
 import { List } from "../List";
 import { LogForm } from "../LogForm";
 
 export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
-  const { checkInterval } = useBirdStreakStore.getState();
+  const { checkInterval, gameStartDate, streakSpan } =
+    useBirdStreakStore.getState();
+
+  const [birdy] = useState(getBirdy());
 
   const lastPeriodEnded = useBirdStreakStore((state) => state.lastPeriodEnded);
   const lastItem = useBirdStreakStore((state) => state.lastItem);
@@ -37,6 +51,11 @@ export const LogBird = () => {
 
   if (!deadline) return null;
 
+  const periodStart = lastItem ? lastItem.periodEnd : gameStartDate;
+  const periodEnd = periodStart
+    ? addMilliseconds(periodStart, streakSpan - 1)
+    : null;
+
   const isTooLate = isBefore(deadline, new Date());
 
   return (
@@ -49,7 +68,7 @@ export const LogBird = () => {
                 Game over!
               </Heading>
               <Box m="1rem 0">
-                <img src={getBirdy()} alt="birdy" width="200rem" />
+                <img src={birdy} alt="birdy" width="200rem" />
               </Box>
               <Box>You missed to log a new bird in your last period.</Box>
               <Box>
@@ -70,7 +89,7 @@ export const LogBird = () => {
               You have logged {lastItem?.name} for this period.
             </Heading>
             <Box m="1rem 0">
-              <img src={getBirdy()} alt="birdy" width="200rem" />
+              <img src={birdy} alt="birdy" width="200rem" />
             </Box>
 
             {nextPeriodStarts && (
@@ -82,9 +101,31 @@ export const LogBird = () => {
         </Card>
       ) : (
         <>
-          {!isTooLate && (
+          {!isTooLate && !!periodStart && !!periodEnd && (
             <>
               <Deadline />
+              <Header>Log your next bird</Header>
+              <Box m="1rem 0">
+                <img src={birdy} alt="birdy" width="200rem" />
+              </Box>
+
+              <ListComponent m="1rem" p="0">
+                <ListItemComponent>
+                  <ListIcon as={FaCrow} key="1" />
+                  This period spans from {format(periodStart, "d/M")} to{" "}
+                  {format(periodEnd, "d/M")}.
+                </ListItemComponent>
+                <ListItemComponent>
+                  <ListIcon as={FaCrow} key="2" />
+                  When you have locked in on a bird you cannot add a new one
+                  until next period starts.
+                </ListItemComponent>
+                <ListItemComponent>
+                  <ListIcon as={FaCrow} key="3" />
+                  Log next bird before end of {format(periodEnd, "d/M")}
+                </ListItemComponent>
+              </ListComponent>
+
               <LogForm />
             </>
           )}
@@ -96,7 +137,6 @@ export const LogBird = () => {
             <Heading as="h3" size="lg" m="0 0 1rem">
               Your list
             </Heading>
-
             <List />
           </>
         ) : null}
