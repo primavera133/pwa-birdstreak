@@ -13,7 +13,6 @@ import {
 import { format, isBefore } from "date-fns";
 import { useState } from "react";
 import { FaCrow, FaExclamation } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBirdy } from "../../logic/getBirdy";
@@ -22,6 +21,7 @@ import { Deadline } from "../Deadline";
 import { Header } from "../Header";
 import { List } from "../List";
 import { LogForm } from "../LogForm";
+import { TooLate } from "../TooLate";
 
 export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
@@ -60,28 +60,7 @@ export const LogBird = () => {
 
   return (
     <Content>
-      <>
-        {isTooLate && (
-          <Card m="0 0 2rem" bg="brand.urgent">
-            <CardBody color="brand.urgentText">
-              <Heading as="h3" size="lg">
-                Game over!
-              </Heading>
-              <Box m="1rem 0">
-                <img src={birdy} alt="birdy" width="200rem" />
-              </Box>
-              <Box>You missed to log a new bird in your last period.</Box>
-              <Box>
-                Go to{" "}
-                <Text as={Link} to="/settings" textDecor="underline">
-                  Settings
-                </Text>{" "}
-                to reset the game if you want to start a new one.
-              </Box>
-            </CardBody>
-          </Card>
-        )}
-      </>
+      <>{isTooLate && <TooLate />}</>
       {noLogsUntilNextPeriod ? (
         <Card m="0 0 2rem" bg="brand.infoBlock">
           <CardBody color="brand.infoBlockText">
@@ -97,7 +76,7 @@ export const LogBird = () => {
                 <Text data-testid="next-period">
                   Next period starts {format(nextPeriodStarts, "d/M")}
                 </Text>
-                {hasUnNamedPeriods && (
+                {!!hasUnNamedPeriods && (
                   <Flex align="center">
                     <Icon as={FaExclamation} />
                     <Text>

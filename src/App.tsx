@@ -22,6 +22,38 @@ function App() {
 
     const parsedGame = parseGame(rehydratedGame);
     useBirdStreakStore.setState({ ...parsedGame, hasRehydrated: true });
+
+    // const parsedGame = parseGame(
+    //   JSON.stringify({
+    //     streakSpan: 172800000,
+    //     checkInterval: 1000,
+    //     gameStartDate: "2022-12-24T23:00:00.000Z",
+    //     lastPeriodEnded: "2022-12-26T22:59:59.999Z",
+    //     nextPeriodStarts: "2022-12-26T23:00:00.000Z",
+    //     deadline: "2022-12-28T22:59:59.999Z",
+    //     list: [
+    //       {
+    //         key: "period1",
+    //         name: "Apa",
+    //         date: "2022-12-28T21:26:22.954Z",
+    //         periodStart: "2022-12-24T23:00:00.000Z",
+    //         periodEnd: "2022-12-26T22:59:59.999Z",
+    //         isNamed: true,
+    //       },
+    //     ],
+    //     lastItem: {
+    //       key: "period1",
+    //       name: "Apa",
+    //       date: "2022-12-28T21:26:22.954Z",
+    //       periodStart: "2022-12-24T23:00:00.000Z",
+    //       periodEnd: "2022-12-26T22:59:59.999Z",
+    //       isNamed: true,
+    //     },
+    //     hasRehydrated: true,
+    //     periodStart: "2022-12-26T23:00:00.000Z",
+    //   })
+    // );
+    // useBirdStreakStore.setState({ ...parsedGame, hasRehydrated: true });
   }, []);
 
   return (
