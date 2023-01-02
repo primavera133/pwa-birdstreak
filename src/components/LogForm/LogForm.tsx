@@ -34,6 +34,7 @@ export const LogForm = ({
   onEditClose?: () => void;
 }) => {
   const [name, setName] = useState("");
+  const [trimmedName, setTrimmedName] = useState("");
   const [nameError, setNameError] = useState("");
   const [period, setPeriod] =
     useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
@@ -51,8 +52,14 @@ export const LogForm = ({
   useEffect(() => {
     if (!name) return;
     const n = normaliseName(name);
-    if (name !== n) setName(n);
-  }, [name]);
+    const t = n.trim();
+    if (name !== n) {
+      setName(n);
+    }
+    if (trimmedName !== t) {
+      setTrimmedName(t);
+    }
+  }, [name, trimmedName]);
 
   useEffect(() => {
     if (periodKey) {
@@ -71,10 +78,13 @@ export const LogForm = ({
     ? period.periodEnd
     : endOfDay(subDays(addMilliseconds(currentPeriodStart, streakSpan), 1));
 
+  console.log("currentPeriodStart", currentPeriodStart);
+  console.log("currentPeriodEnd", currentPeriodEnd);
+
   const handleLockIn = async () => {
     const listItem = {
       key: period ? period.key : `period${list.length + 1}`,
-      name,
+      name: trimmedName,
       date: new Date(),
       periodStart: currentPeriodStart,
       periodEnd: currentPeriodEnd,
@@ -124,18 +134,18 @@ export const LogForm = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const valid = validateInput(name, list);
+    const valid = validateInput(trimmedName, list, currentPeriodStart);
     if (!valid) {
-      const item = list.find((item) => item.name === name);
+      const item = list.find((item) => item.name === trimmedName);
       if (item) {
         setNameError(
-          `You logged ${name} for ${format(item.periodStart, "d/M")} - ${format(
-            item.periodEnd,
+          `You logged ${trimmedName} for ${format(
+            item.periodStart,
             "d/M"
-          )} already.`
+          )} - ${format(item.periodEnd, "d/M")} already.`
         );
+        return;
       }
-      return;
     }
 
     onOpen();
@@ -173,12 +183,15 @@ export const LogForm = ({
         colorScheme="blue"
         size="lg"
         type="submit"
-        disabled={!name}
+        disabled={!trimmedName}
         m="0 0 5rem"
       >
-        {name ? <Text>Lock in {name}</Text> : <Text>Lock in</Text>}
+        {trimmedName ? (
+          <Text>Lock in {trimmedName}</Text>
+        ) : (
+          <Text>Lock in</Text>
+        )}
       </Button>
-
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}

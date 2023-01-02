@@ -3,7 +3,6 @@ import {
   Card,
   CardBody,
   Flex,
-  Icon,
   List as ListComponent,
   ListItem as ListItemComponent,
   Modal,
@@ -18,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { format, formatDuration, intervalToDuration } from "date-fns";
 import { useState } from "react";
-import { FaRegEdit } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { ListItem } from "../../types";
 import { LogForm } from "../LogForm";
@@ -32,7 +30,6 @@ export const List = () => {
   const [editPeriod, setEditPeriod] =
     useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
   const list = useBirdStreakStore((state) => state.list);
-  const lastItem = useBirdStreakStore((state) => state.lastItem);
 
   const handleEdit = (key: string, i: number) => {
     const listItem = list.find((item) => item.key === key);
@@ -102,7 +99,6 @@ export const List = () => {
                   >
                     {name}
                   </Text>
-                  {!isNamed || (i === 0 && <Icon as={FaRegEdit} />)}
                 </Flex>
               </Card>
             )
