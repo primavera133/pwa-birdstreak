@@ -12,17 +12,24 @@ import { parseGame } from "./logic/parseGame";
 import { theme } from "./theme";
 
 function App() {
+  const appVersion = `${process.env.REACT_APP_VERSION}`;
+  console.log("app version", appVersion);
   useEffect(() => {
     console.log("rehydrating game");
     const rehydratedGame = localStorage.getItem(GAME.persistKey);
+
     if (!rehydratedGame) {
-      useBirdStreakStore.setState({ hasRehydrated: true });
+      useBirdStreakStore.setState({ hasRehydrated: true, appVersion });
       return;
     }
 
     const parsedGame = parseGame(rehydratedGame);
-    useBirdStreakStore.setState({ ...parsedGame, hasRehydrated: true });
-  }, []);
+    useBirdStreakStore.setState({
+      ...parsedGame,
+      hasRehydrated: true,
+      appVersion,
+    });
+  }, [appVersion]);
 
   return (
     <ChakraProvider theme={theme}>

@@ -4,6 +4,7 @@ import { GAME } from "../config/game";
 import { BirdStreakStore } from "../types";
 
 export const initialState: BirdStreakStore = {
+  appVersion: `${process.env.REACT_APP_VERSION}`,
   streakSpan: GAME.streakSpanMillis,
   checkInterval: GAME.checkInterval,
   gameStartDate: undefined,

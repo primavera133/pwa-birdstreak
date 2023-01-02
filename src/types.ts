@@ -15,6 +15,7 @@ export type UnparsedListItem = {
 };
 
 export type BirdStreakStore = {
+  appVersion: string;
   streakSpan: number;
   checkInterval: number;
   gameStartDate?: Date;
