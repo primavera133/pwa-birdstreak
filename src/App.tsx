@@ -29,7 +29,7 @@ function App() {
       hasRehydrated: true,
       appVersion,
     });
-  }, []);
+  }, [appVersion]);
 
   return (
     <ChakraProvider theme={theme}>
