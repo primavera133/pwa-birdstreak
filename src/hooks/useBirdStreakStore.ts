@@ -3,7 +3,7 @@ import create from "zustand";
 import { GAME } from "../config/game";
 import { BirdStreakStore } from "../types";
 
-export const initialState = {
+export const initialState: BirdStreakStore = {
   streakSpan: GAME.streakSpanMillis,
   checkInterval: GAME.checkInterval,
   gameStartDate: undefined,
@@ -13,6 +13,7 @@ export const initialState = {
   list: [],
   lastItem: undefined,
   hasRehydrated: false,
+  editPeriod: undefined,
 };
 
 export const useBirdStreakStore = create<BirdStreakStore>(

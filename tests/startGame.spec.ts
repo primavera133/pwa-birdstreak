@@ -38,15 +38,6 @@ test("start a game, log a bird", async ({ page, context }) => {
 
   await page.getByRole("button", { name: "Lock in Kråka" }).click();
 
-  const alert = page.getByRole("alertdialog");
-  await expect(alert).toBeVisible();
-  const title = alert.getByText("Lock in Kråka");
-  await expect(title).toBeVisible();
-
-  const doItBtn = alert.getByRole("button", { name: "Lock" });
-  await expect(doItBtn).toBeVisible();
-  await doItBtn.click();
-
   // Expect new infobox wih header
   await expect(
     page.getByRole("heading", {

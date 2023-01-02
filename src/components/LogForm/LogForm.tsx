@@ -1,16 +1,4 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Box,
-  Button,
-  Input,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Input, Text } from "@chakra-ui/react";
 import {
   addDays,
   addMilliseconds,
@@ -19,71 +7,69 @@ import {
   startOfDay,
 } from "date-fns";
 import { subDays } from "date-fns/esm";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { normaliseName } from "../../logic/normaliseName";
 import { validateInput } from "../../logic/validateInput";
-import { ListItem } from "../../types";
 
 export const LogForm = ({
-  periodKey,
   onEditClose,
 }: {
   periodKey?: string;
   onEditClose?: () => void;
 }) => {
   const [name, setName] = useState("");
+  const [trimmedName, setTrimmedName] = useState("");
   const [nameError, setNameError] = useState("");
-  const [period, setPeriod] =
-    useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { streakSpan } = useBirdStreakStore.getState();
 
-  const cancelRef = useRef<HTMLButtonElement>(null);
-
-  const gameStartDate = useBirdStreakStore((state) => state.gameStartDate);
   const list = useBirdStreakStore((state) => state.list);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
+  const editPeriod = useBirdStreakStore((state) => state.editPeriod);
 
   // Normalize name
   useEffect(() => {
     if (!name) return;
     const n = normaliseName(name);
-    if (name !== n) setName(n);
-  }, [name]);
+    const t = n.trim();
+    if (name !== n) {
+      setName(n);
+    }
+    if (trimmedName !== t) {
+      setTrimmedName(t);
+    }
+  }, [name, trimmedName]);
 
   useEffect(() => {
-    if (periodKey) {
-      const listItem = list.find((item) => item.key === periodKey);
+    if (editPeriod) {
+      const listItem = list.find((item) => item.key === editPeriod.key);
       setName(listItem?.name || "");
-      setPeriod(listItem);
     }
-  }, [periodKey, list]);
+  }, [editPeriod, list]);
 
-  if (!gameStartDate) return null; // typechecking to keep date-fns happy
   if (!periodStart) return null; // typechecking to keep date-fns happy
 
-  const currentPeriodStart = period ? period.periodStart : periodStart;
-
-  const currentPeriodEnd = period
-    ? period.periodEnd
+  const currentPeriodStart = editPeriod ? editPeriod.periodStart : periodStart;
+  const currentPeriodEnd = editPeriod
+    ? editPeriod.periodEnd
     : endOfDay(subDays(addMilliseconds(currentPeriodStart, streakSpan), 1));
 
   const handleLockIn = async () => {
+    //
     const listItem = {
-      key: period ? period.key : `period${list.length + 1}`,
-      name,
+      key: editPeriod?.key || `period${list.length + 1}`,
+      name: trimmedName,
       date: new Date(),
       periodStart: currentPeriodStart,
       periodEnd: currentPeriodEnd,
       isNamed: true,
     };
 
-    const newList = period
+    const newList = editPeriod
       ? list.map((item) => {
-          if (item.key === period.key) {
+          if (item.key === editPeriod.key) {
             return listItem;
           } else {
             return item;
@@ -92,9 +78,7 @@ export const LogForm = ({
       : [...list, listItem];
 
     const lastItem = newList[newList.length - 1];
-
     const nextPeriodStarts = startOfDay(addDays(lastItem.periodEnd, 1));
-
     const deadline = addMilliseconds(lastItem.periodEnd, streakSpan);
 
     // update app state
@@ -105,12 +89,12 @@ export const LogForm = ({
       periodStart,
       nextPeriodStarts,
       deadline,
+      editPeriod: undefined,
     });
 
     // reset input and errors
     setName("");
     setNameError("");
-    // setPeriod(undefined);
 
     // persist total state
     localStorage.setItem(
@@ -124,25 +108,24 @@ export const LogForm = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const valid = validateInput(name, list);
+    const valid = validateInput(trimmedName, list, currentPeriodStart);
     if (!valid) {
-      const item = list.find((item) => item.name === name);
+      const item = list.find((item) => item.name === trimmedName);
       if (item) {
         setNameError(
-          `You logged ${name} for ${format(item.periodStart, "d/M")} - ${format(
-            item.periodEnd,
+          `You logged ${trimmedName} for ${format(
+            item.periodStart,
             "d/M"
-          )} already.`
+          )} - ${format(item.periodEnd, "d/M")} already.`
         );
+        return;
       }
-      return;
     }
 
-    onOpen();
+    handleLockIn();
   };
 
   const handleClose = () => {
-    onClose();
     if (onEditClose) onEditClose();
   };
 
@@ -173,38 +156,15 @@ export const LogForm = ({
         colorScheme="blue"
         size="lg"
         type="submit"
-        disabled={!name}
+        disabled={!trimmedName}
         m="0 0 5rem"
       >
-        {name ? <Text>Lock in {name}</Text> : <Text>Lock in</Text>}
+        {trimmedName ? (
+          <Text>Lock in {trimmedName}</Text>
+        ) : (
+          <Text>Lock in</Text>
+        )}
       </Button>
-
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={handleClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Lock in {name}
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" onClick={handleLockIn} ml={3}>
-                Lock
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
     </form>
   );
 };

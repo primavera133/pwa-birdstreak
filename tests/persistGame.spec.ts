@@ -35,8 +35,6 @@ test("starting and persisting a game by logging a bird", async ({
 
   await page.getByRole("button", { name: "Lock in Kråka" }).click();
 
-  page.getByRole("alertdialog").getByRole("button", { name: "Lock" }).click();
-
   // Test persisted game in localStorage
   const persistedState = context.storageState();
   let game = (await persistedState).origins
