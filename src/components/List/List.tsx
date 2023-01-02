@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   Flex,
+  Icon,
   List as ListComponent,
   ListItem as ListItemComponent,
   Modal,
@@ -16,7 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { format, formatDuration, intervalToDuration } from "date-fns";
-import { useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { ListItem } from "../../types";
 import { LogForm } from "../LogForm";
@@ -27,15 +28,13 @@ export const List = () => {
     onOpen: onEditOpen,
     onClose: onEditClose,
   } = useDisclosure();
-  const [editPeriod, setEditPeriod] =
-    useState<Pick<ListItem, "periodStart" | "periodEnd" | "key">>();
   const list = useBirdStreakStore((state) => state.list);
+  const editPeriod = useBirdStreakStore((state) => state.editPeriod);
 
   const handleEdit = (key: string, i: number) => {
     const listItem = list.find((item) => item.key === key);
-    if (!listItem) return;
-    if (!listItem.isNamed || i === 0) {
-      setEditPeriod(listItem);
+    if (listItem) {
+      useBirdStreakStore.setState({ editPeriod: listItem });
       onEditOpen();
     }
   };
@@ -80,12 +79,11 @@ export const List = () => {
                 bg={isNamed ? "brand.info" : "brand.infoBlock"}
                 key={key}
                 m="0 0 1rem"
-                onClick={() => handleEdit(key, i)}
               >
-                <Flex as={CardBody} align="center">
+                <Flex as={CardBody} align="center" p="0 0.25rem 0 1.25rem">
                   <Text
                     fontSize="s"
-                    m="0 1rem 0 0"
+                    m="1rem 1rem 1rem 0"
                     data-testid={`listItemPeriod${i}`}
                   >
                     {format(periodStart, "d/M")} - {format(periodEnd, "d/M")}
@@ -96,9 +94,15 @@ export const List = () => {
                     textTransform="capitalize"
                     flex="1"
                     data-testid={`listItemName${i}`}
+                    m="1rem 0"
                   >
                     {name}
                   </Text>
+                  <Icon
+                    as={FaRegEdit}
+                    onClick={() => handleEdit(key, i)}
+                    m="1rem"
+                  />
                 </Flex>
               </Card>
             )
@@ -110,18 +114,18 @@ export const List = () => {
           <ModalHeader>
             {editPeriod && (
               <>
-                Edit period {format(editPeriod?.periodStart, "d/M")} -{" "}
-                {format(editPeriod?.periodEnd, "d/M")}
+                Edit period {format(editPeriod.periodStart, "d/M")} -{" "}
+                {format(editPeriod.periodEnd, "d/M")}
               </>
             )}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <LogForm periodKey={editPeriod?.key} onEditClose={onEditClose} />
+            <LogForm onEditClose={onEditClose} />
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onEditClose}>
+            <Button mr={3} onClick={onEditClose}>
               Close
             </Button>
           </ModalFooter>
