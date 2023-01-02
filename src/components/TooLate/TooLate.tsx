@@ -20,11 +20,7 @@ import { getBirdy } from "../../logic/getBirdy";
 import { LogForm } from "../LogForm";
 
 export const TooLate = () => {
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const deadline = useBirdStreakStore((state) => state.deadline);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
@@ -52,7 +48,12 @@ export const TooLate = () => {
           <Box m="1rem 0">
             <img src={birdy} alt="birdy" width="200rem" />
           </Box>
-          <Box>You missed to log a new bird in your last period.</Box>
+          <Box>
+            <>
+              You missed to log a new bird in your last period (
+              {format(periodStart, "d/M")} - {format(deadline, "d/M")}).
+            </>
+          </Box>
           <Box>
             Go to{" "}
             <Button
@@ -70,7 +71,7 @@ export const TooLate = () => {
               <Button
                 variant="link"
                 textDecoration="underline"
-                onClick={onEditOpen}
+                onClick={onOpen}
               >
                 cheat
               </Button>{" "}
@@ -80,7 +81,7 @@ export const TooLate = () => {
         </CardBody>
       </Card>
 
-      <Modal isOpen={isEditOpen} onClose={onEditClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>So you want to keep playing?</ModalHeader>
@@ -90,11 +91,11 @@ export const TooLate = () => {
               Log your last period {format(periodStart, "d/M")} -{" "}
               {format(deadline, "d/M")}
             </Box>
-            <LogForm onEditClose={onEditClose} />
+            <LogForm onEditClose={onClose} />
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onEditClose}>
+            <Button mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

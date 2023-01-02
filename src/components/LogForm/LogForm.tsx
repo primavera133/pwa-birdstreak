@@ -4,6 +4,7 @@ import {
   addMilliseconds,
   endOfDay,
   format,
+  isAfter,
   startOfDay,
 } from "date-fns";
 import { subDays } from "date-fns/esm";
@@ -13,12 +14,7 @@ import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { normaliseName } from "../../logic/normaliseName";
 import { validateInput } from "../../logic/validateInput";
 
-export const LogForm = ({
-  onEditClose,
-}: {
-  periodKey?: string;
-  onEditClose?: () => void;
-}) => {
+export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
   const [name, setName] = useState("");
   const [trimmedName, setTrimmedName] = useState("");
   const [nameError, setNameError] = useState("");
@@ -78,15 +74,22 @@ export const LogForm = ({
       : [...list, listItem];
 
     const lastItem = newList[newList.length - 1];
-    const nextPeriodStarts = startOfDay(addDays(lastItem.periodEnd, 1));
+    let nextPeriodStarts = startOfDay(addDays(lastItem.periodEnd, 1));
     const deadline = addMilliseconds(lastItem.periodEnd, streakSpan);
+    let newPeriodStart = lastItem.periodStart;
+
+    //cheaters..
+    if (isAfter(new Date(), nextPeriodStarts)) {
+      newPeriodStart = nextPeriodStarts;
+      nextPeriodStarts = addMilliseconds(nextPeriodStarts, streakSpan);
+    }
 
     // update app state
     useBirdStreakStore.setState({
       list: newList,
       lastItem,
       lastPeriodEnded: lastItem.periodEnd,
-      periodStart,
+      periodStart: newPeriodStart,
       nextPeriodStarts,
       deadline,
       editPeriod: undefined,
