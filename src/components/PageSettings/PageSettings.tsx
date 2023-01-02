@@ -143,6 +143,8 @@ export const PageSettings = () => {
           </CardBody>
         </Card>
 
+        <Text>app version: {`${process.env.REACT_APP_VERSION}`}</Text>
+
         <AlertDialog
           isOpen={isOpen}
           leastDestructiveRef={cancelRef}
