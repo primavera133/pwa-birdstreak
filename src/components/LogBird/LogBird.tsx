@@ -25,7 +25,7 @@ import { TooLate } from "../TooLate";
 
 export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
-  const { checkInterval } = useBirdStreakStore.getState();
+  const { checkInterval, singleDay } = useBirdStreakStore.getState();
 
   const birdy = getBirdy();
 
@@ -96,20 +96,37 @@ export const LogBird = () => {
               </Box>
 
               <ListComponent m="1rem" p="0">
-                <ListItemComponent>
-                  <ListIcon as={FaCrow} key="1" />
-                  This period spans from {format(periodStart, "d/M")} to{" "}
-                  {format(deadline, "d/M")}.
-                </ListItemComponent>
-                <ListItemComponent>
-                  <ListIcon as={FaCrow} key="2" />
-                  When you have locked in on a bird you cannot add a new one
-                  until next period starts.
-                </ListItemComponent>
-                <ListItemComponent>
-                  <ListIcon as={FaCrow} key="3" />
-                  Log next bird before end of {format(deadline, "d/M")}
-                </ListItemComponent>
+                {singleDay && (
+                  <>
+                    <ListItemComponent>
+                      <ListIcon as={FaCrow} key="1" />
+                      This period is {format(periodStart, "d/M")}.
+                    </ListItemComponent>
+                    <ListItemComponent>
+                      <ListIcon as={FaCrow} key="2" />
+                      When you have locked in on a bird you cannot add a new one
+                      until tomorrow.
+                    </ListItemComponent>
+                  </>
+                )}
+                {!singleDay && (
+                  <>
+                    <ListItemComponent>
+                      <ListIcon as={FaCrow} key="1" />
+                      This period is {format(periodStart, "d/M")} to{" "}
+                      {format(deadline, "d/M")}.
+                    </ListItemComponent>
+                    <ListItemComponent>
+                      <ListIcon as={FaCrow} key="2" />
+                      When you have locked in on a bird you cannot add a new one
+                      until next period starts.
+                    </ListItemComponent>
+                    <ListItemComponent>
+                      <ListIcon as={FaCrow} key="3" />
+                      Log next bird before end of {format(deadline, "d/M")}
+                    </ListItemComponent>
+                  </>
+                )}
               </ListComponent>
 
               <LogForm />

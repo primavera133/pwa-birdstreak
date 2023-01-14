@@ -28,6 +28,8 @@ export const List = () => {
     onOpen: onEditOpen,
     onClose: onEditClose,
   } = useDisclosure();
+  const { singleDay } = useBirdStreakStore.getState();
+
   const list = useBirdStreakStore((state) => state.list);
   const editPeriod = useBirdStreakStore((state) => state.editPeriod);
 
@@ -86,7 +88,8 @@ export const List = () => {
                     m="1rem 1rem 1rem 0"
                     data-testid={`listItemPeriod${i}`}
                   >
-                    {format(periodStart, "d/M")} - {format(periodEnd, "d/M")}
+                    {format(periodStart, "d/M")}
+                    {!singleDay && <>- {format(periodEnd, "d/M")}</>}
                   </Text>
                   <Text
                     fontWeight="bold"
@@ -114,8 +117,8 @@ export const List = () => {
           <ModalHeader>
             {editPeriod && (
               <>
-                Edit period {format(editPeriod.periodStart, "d/M")} -{" "}
-                {format(editPeriod.periodEnd, "d/M")}
+                Edit period {format(editPeriod.periodStart, "d/M")}
+                {!singleDay && <> - {format(editPeriod.periodEnd, "d/M")}</>}
               </>
             )}
           </ModalHeader>

@@ -79,6 +79,7 @@ export const StartGame = () => {
       list: periods,
       lastItem,
       streakSpan,
+      singleDay: streakSpan === ONE_DAY_IN_MILLISECONDS,
     });
 
     // persist total state
