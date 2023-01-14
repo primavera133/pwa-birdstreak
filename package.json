@@ -2,7 +2,7 @@
   "name": "pwa-birdstreak",
   "author": "Jonas Myrenås",
   "license": "ISC",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.14",

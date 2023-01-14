@@ -67,6 +67,23 @@ export const PageAbout = () => {
             </Text>
           </Text>
         </Box>
+        <Box>
+          <Flex align="center">
+            <Icon as={FaStar} m="0 .5rem 1rem 0" boxSize="6" />
+            <Header>Version log</Header>
+          </Flex>
+
+          <Text m="0 0 1rem">
+            Current app version: {`${process.env.REACT_APP_VERSION}`}
+          </Text>
+          <Text m="0 0 1rem">
+            0.3.1: Nasty little bug fixed, so the game should work again.
+          </Text>
+          <Text m="0 0 1rem">
+            0.3.0: Possile to edit all entries and you get one period after game
+            over to cheat your way back into the game again.
+          </Text>
+        </Box>
       </Content>
       <Footer />
     </Layout>
