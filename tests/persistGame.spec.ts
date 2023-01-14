@@ -56,10 +56,6 @@ test("starting and persisting a game by logging a bird", async ({
   expect(parsedGame.lastPeriodEnded).toStrictEqual(
     new Date("2000-01-02T22:59:59.999Z")
   );
-  expect(parsedGame.nextPeriodStarts instanceof Date).toBeTruthy();
-  expect(parsedGame.nextPeriodStarts).toStrictEqual(
-    new Date("2000-01-02T23:00:00.000Z")
-  );
   expect(parsedGame.deadline instanceof Date).toBeTruthy();
   expect(parsedGame.deadline).toStrictEqual(
     new Date("2000-01-04T22:59:59.999Z")

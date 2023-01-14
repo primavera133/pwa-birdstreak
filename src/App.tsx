@@ -1,7 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import "./App.css";
 import { MyList } from "./components/MyList";
 import { PageAbout } from "./components/PageAbout";
 import { PageHome } from "./components/PageHome";
@@ -9,13 +8,15 @@ import { PageSettings } from "./components/PageSettings";
 import { GAME } from "./config/game";
 import { useBirdStreakStore } from "./hooks/useBirdStreakStore";
 import { parseGame } from "./logic/parseGame";
+import { migrate } from "./migrations";
 import { theme } from "./theme";
 
 function App() {
   const appVersion = `${process.env.REACT_APP_VERSION}`;
   console.log("app version", appVersion);
+
   useEffect(() => {
-    console.log("rehydrating game");
+    console.log("rehydrating", GAME.persistKey);
     const rehydratedGame = localStorage.getItem(GAME.persistKey);
 
     if (!rehydratedGame) {
@@ -23,7 +24,8 @@ function App() {
       return;
     }
 
-    const parsedGame = parseGame(rehydratedGame);
+    const parsedGame = migrate(parseGame(rehydratedGame));
+
     useBirdStreakStore.setState({
       ...parsedGame,
       hasRehydrated: true,

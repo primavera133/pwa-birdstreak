@@ -34,9 +34,6 @@ export const LogBird = () => {
   const deadline = useBirdStreakStore((state) => state.deadline);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
   const list = useBirdStreakStore((state) => state.list);
-  const nextPeriodStarts = useBirdStreakStore(
-    (state) => state.nextPeriodStarts
-  );
 
   const checkNoLogsUntilNextPeriod = () => {
     if (!lastPeriodEnded) return;
@@ -71,10 +68,10 @@ export const LogBird = () => {
               <img src={birdy} alt="birdy" width="200rem" />
             </Box>
 
-            {nextPeriodStarts && (
+            {periodStart && (
               <>
                 <Text data-testid="next-period">
-                  Next period starts {format(nextPeriodStarts, "d/M")}
+                  Next period starts {format(periodStart, "d/M")}
                 </Text>
                 {!!hasUnNamedPeriods && (
                   <Flex align="center">

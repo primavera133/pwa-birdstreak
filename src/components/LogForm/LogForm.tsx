@@ -4,7 +4,6 @@ import {
   addMilliseconds,
   endOfDay,
   format,
-  isAfter,
   startOfDay,
 } from "date-fns";
 import { subDays } from "date-fns/esm";
@@ -47,10 +46,11 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
 
   if (!periodStart) return null; // typechecking to keep date-fns happy
 
-  const currentPeriodStart = editPeriod ? editPeriod.periodStart : periodStart;
-  const currentPeriodEnd = editPeriod
+  let editPeriodStart = editPeriod ? editPeriod.periodStart : periodStart;
+
+  const editPeriodEnd = editPeriod
     ? editPeriod.periodEnd
-    : endOfDay(subDays(addMilliseconds(currentPeriodStart, streakSpan), 1));
+    : endOfDay(subDays(addMilliseconds(editPeriodStart, streakSpan), 1));
 
   const handleLockIn = async () => {
     //
@@ -58,8 +58,8 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
       key: editPeriod?.key || `period${list.length + 1}`,
       name: trimmedName,
       date: new Date(),
-      periodStart: currentPeriodStart,
-      periodEnd: currentPeriodEnd,
+      periodStart: editPeriodStart,
+      periodEnd: editPeriodEnd,
       isNamed: true,
     };
 
@@ -74,23 +74,17 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
       : [...list, listItem];
 
     const lastItem = newList[newList.length - 1];
-    let nextPeriodStarts = startOfDay(addDays(lastItem.periodEnd, 1));
     const deadline = addMilliseconds(lastItem.periodEnd, streakSpan);
-    let newPeriodStart = lastItem.periodStart;
 
-    //cheaters..
-    if (isAfter(new Date(), nextPeriodStarts)) {
-      newPeriodStart = nextPeriodStarts;
-      nextPeriodStarts = addMilliseconds(nextPeriodStarts, streakSpan);
-    }
+    const newPeriodStart = startOfDay(addDays(lastItem.periodEnd, 1));
 
     // update app state
     useBirdStreakStore.setState({
+      appVersion: `${process.env.REACT_APP_VERSION}`,
       list: newList,
       lastItem,
       lastPeriodEnded: lastItem.periodEnd,
       periodStart: newPeriodStart,
-      nextPeriodStarts,
       deadline,
       editPeriod: undefined,
     });
@@ -111,8 +105,7 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const valid = validateInput(trimmedName, list, currentPeriodStart);
-    if (!valid) {
+    if (!validateInput(trimmedName, list, editPeriodStart)) {
       const item = list.find((item) => item.name === trimmedName);
       if (item) {
         setNameError(

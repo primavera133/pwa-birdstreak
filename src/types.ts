@@ -20,7 +20,6 @@ export type BirdStreakStore = {
   checkInterval: number;
   gameStartDate?: Date;
   lastPeriodEnded?: Date;
-  nextPeriodStarts?: Date;
   periodStart?: Date;
   deadline?: Date;
   list: ListItem[];
