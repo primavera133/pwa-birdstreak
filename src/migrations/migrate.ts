@@ -1,4 +1,4 @@
-import { addDays, startOfDay } from "date-fns";
+import { addDays, addMilliseconds, startOfDay } from "date-fns";
 import { GAME } from "../config/game";
 import { BirdStreakStore } from "../types";
 
@@ -22,6 +22,19 @@ export const migrate = (rehydratedGame: any): BirdStreakStore => {
     };
     // update periodStart
     newGame.periodStart = startOfDay(addDays(lastItem.periodEnd, 1));
+
+    //fix broken startDates in list
+    let startDate = newGame.gameStartDate;
+    newGame.list = rehydratedGame.list.map((item: any) => {
+      item.periodStart = startDate;
+      if (startDate) {
+        startDate = addMilliseconds(startDate, GAME.streakSpanMillis);
+      }
+      return item;
+    });
+
+    //Update lastItem
+    newGame.lastItem = newGame.list[rehydratedGame.list.length - 1];
 
     // remove legacy nextPeriodStarts
     delete newGame.nextPeriodStarts;
