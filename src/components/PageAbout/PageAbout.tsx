@@ -77,6 +77,10 @@ export const PageAbout = () => {
             Current app version: {`${process.env.REACT_APP_VERSION}`}
           </Text>
           <Text m="0 0 1rem">
+            0.4.0: Play with different streak periods. Once a day, every second
+            day or weekly.
+          </Text>
+          <Text m="0 0 1rem">
             0.3.1: Nasty little bug fixed, so the game should work again.
           </Text>
           <Text m="0 0 1rem">
