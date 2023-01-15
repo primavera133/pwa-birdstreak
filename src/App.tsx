@@ -7,8 +7,10 @@ import { PageHome } from "./components/PageHome";
 import { PageSettings } from "./components/PageSettings";
 import { GAME } from "./config/game";
 import { useBirdStreakStore } from "./hooks/useBirdStreakStore";
+// import { moveDate } from "./logic/moveDate";
 import { parseGame } from "./logic/parseGame";
 import { migrate } from "./migrations";
+// import * as testData from "./testData/birdStreakDataDump (10).json";
 import { theme } from "./theme";
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
   useEffect(() => {
     console.log("rehydrating", GAME.persistKey);
     const rehydratedGame = localStorage.getItem(GAME.persistKey);
+    // const rehydratedGame = JSON.stringify(testData);
 
     if (!rehydratedGame) {
       useBirdStreakStore.setState({ hasRehydrated: true, appVersion });
@@ -25,6 +28,9 @@ function App() {
     }
 
     const parsedGame = migrate(parseGame(rehydratedGame));
+    // const parsedGame = migrate(
+    //   moveDate(parseGame(rehydratedGame), "backward", 14)
+    // );
 
     useBirdStreakStore.setState({
       ...parsedGame,
