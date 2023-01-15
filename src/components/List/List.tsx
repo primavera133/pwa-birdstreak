@@ -89,7 +89,7 @@ export const List = () => {
                     data-testid={`listItemPeriod${i}`}
                   >
                     {format(periodStart, "d/M")}
-                    {!singleDay && <>- {format(periodEnd, "d/M")}</>}
+                    {!singleDay && <> - {format(periodEnd, "d/M")}</>}
                   </Text>
                   <Text
                     fontWeight="bold"
