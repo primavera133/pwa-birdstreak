@@ -102,7 +102,7 @@ export const StartGame = () => {
       </Box>
       <Text m="0 0 1rem">
         Welcome to start a streak game. It will start the day you press this
-        button. Every period is {formatted}
+        button. Every period is {formatted}.
       </Text>
       <Box m="0 0 1rem">
         <Box as="label" htmlFor="myDdatePicker">
