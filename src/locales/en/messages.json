@@ -1,0 +1,97 @@
+{
+  "translation": {
+    "about": {
+      "rules": {
+        "header": "Rules",
+        "rule1": "Log a new bird every period.",
+        "rule2": "You need to see the bird within the period.",
+        "rule3": "If you haven't seen any new birds when a period comes to it's end, you are out."
+      },
+      "about": {
+        "header": "About",
+        "text1": "Game coded by Jonas Myrenås. Report bugs to",
+        "text2": "or log an issue in"
+      },
+      "birdLogoCredit": "Bird logo and illustrations from",
+      "log": {
+        "header": "Version log",
+        "current": "Current app version"
+      }
+    },
+    "settings": {
+      "header": "Settings",
+      "selectLangage": "Select language",
+      "languageEn": "English",
+      "languageSv": "Svenska",
+      "export": "Export",
+      "exportHint": "Export the streak to CSV format",
+      "exportBtn": "Export streak",
+      "dataDump": "Data dump",
+      "dataDumpHint": "Complete data-dump. Good for debugging if you want to complain to the maker of this app. Add it to a mail to birdstreak@gmail.com",
+      "dataDumpBtn": "Dump data",
+      "deleteGame": "Delete game",
+      "deleteGameHint": "You can delete the current game if you want to restart.",
+      "deleteGameBtn": "Delete game",
+      "appVersion": "app version",
+      "alertHeader": "Delete game",
+      "alertBody": "Are you sure? You can't undo this action afterwards.",
+      "alertBtnCancel": "Cancel",
+      "alertBtnDelete": "Delete game"
+    },
+    "startGame": {
+      "header": "Start game",
+      "welcome": "Welcome to start a streak game. Select a start date and how often you wan to log. Every period is {{formatted}}.",
+      "startDate": "Start date",
+      "dateHint": "You can start the game on today or a previous date (and backfill your sightings).",
+      "frequency": "Frequency",
+      "frequencyHint": "Select how often you want to report.",
+      "buttonStart": "Start a new streak"
+    },
+    "logBird": {
+      "youHave": "You have logged {{birdName}} for this period.",
+      "nextPeriod": "Next period starts {{ period }}",
+      "remains": "You still have {{hasUnNamedPeriods}} older periods to log!",
+      "header": "Log your next bird",
+      "thisPeriodSingle": "This period is {{date}}.",
+      "whenSingle": "When you have locked in on a bird you cannot add a new one until tomorrow.",
+      "thisPeriodMultiple": "This period is {{from}} to {{to}}.",
+      "whenMultiple": "When you have locked in on a bird you cannot add a new one until next period starts.",
+      "nextMultiple": "Log next bird before end of {{deadline}}",
+      "yourList": "Your list"
+    },
+    "logForm": {
+      "labelName": "Bird name to log",
+      "namePlaceholder": "Crow, Heron, etc",
+      "lockBtn": "Lock in"
+    },
+    "list": {
+      "soFar": "So far you've locked in {{p}}, over a total of {{duration}}.",
+      "editPeriod": "Edit period",
+      "close": "Close"
+    },
+    "deadline": {
+      "text": "Log next bird before end of today!"
+    },
+    "footer": {
+      "about": "about",
+      "settigs": "settings"
+    },
+    "myList": {
+      "header": "Your list"
+    },
+    "tooLate": {
+      "header": "Game over!",
+      "text": "You missed to log a new bird in your last period",
+      "goto": "Go to",
+      "btnSettings": "Settings",
+      "goto2": "to reset the game if you want to start a new one.",
+      "cheat": "...or you could",
+      "cheatBtn": "cheat",
+      "cheat2": "a bit",
+      "modalHeader": "So you want to keep playing?",
+      "modalLogDay": "Log your missed day",
+      "modalLogPeriod": "Log your missed period",
+      "modalBtn": "Close"
+    }
+  }
+}

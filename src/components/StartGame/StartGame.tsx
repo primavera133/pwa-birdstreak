@@ -19,9 +19,11 @@ import { useState } from "react";
 import { GAME } from "../../config/game";
 
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { useTranslation } from "react-i18next";
 import { FaCrow } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBackfill } from "../../logic/getBackfill";
+import { getLocale } from "../../logic/getLocale";
 import { Content } from "../Content";
 import { Header } from "../Header";
 import { RadioCard } from "../RadioCard";
@@ -31,6 +33,8 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 export const StartGame = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [streakSpan, setStreakSpan] = useState(2 * ONE_DAY_IN_MILLISECONDS);
+
+  const { t, i18n } = useTranslation();
 
   const streakSpanOptions = [
     { value: "1day", text: "Once a day" },
@@ -92,22 +96,20 @@ export const StartGame = () => {
   const duration = intervalToDuration({ start: 0, end: streakSpan });
   const formatted = formatDuration(duration, {
     format: ["days"],
+    locale: getLocale(i18n.language),
   });
 
   return (
     <Content>
-      <Header>Start game</Header>
+      <Header>{t("startGame.header")}</Header>
       <Box m="1rem 0">
         <img src="/bird2.webp" alt="birdy" width="200rem" />
       </Box>
-      <Text m="0 0 1rem">
-        Welcome to start a streak game. It will start the day you press this
-        button. Every period is {formatted}.
-      </Text>
+      <Text m="0 0 1rem">{t("startGame.welcome", { formatted })}</Text>
       <Box m="0 0 1rem">
         <Box as="label" htmlFor="myDdatePicker">
           <Text as="span" fontWeight="bold" fontSize="xl">
-            Start date
+            {t("startGame.startDate")}
           </Text>
         </Box>
         <Box m="0 0 .25rem 0">
@@ -130,17 +132,14 @@ export const StartGame = () => {
         </Box>
         <Flex align="center">
           <Icon as={FaCrow} m="0 .25rem 0" />
-          <Text as="span">
-            You can start the game on today or a previous date (and backfill
-            your sightings).
-          </Text>
+          <Text as="span">{t("startGame.dateHint")}</Text>
         </Flex>
       </Box>
 
       <Box m="0 0 1rem">
         <Box m="0 0 .5rem">
           <Text as="span" fontWeight="bold" fontSize="xl">
-            Frequency
+            {t("startGame.frequency")}
           </Text>
         </Box>
 
@@ -158,12 +157,12 @@ export const StartGame = () => {
         </HStack>
         <Flex align="center">
           <Icon as={FaCrow} m="0 .25rem 0" />
-          <Text as="span">Select how often you want to report.</Text>
+          <Text as="span">{t("startGame.frequencyHint")}</Text>
         </Flex>
       </Box>
 
       <Button colorScheme="blue" onClick={handleClick} size="lg">
-        Start a new streak
+        {t("startGame.buttonStart")}
       </Button>
     </Content>
   );

@@ -28,10 +28,18 @@ import { Header } from "../Header";
 import { Layout } from "../Layout";
 import { NavBar } from "../NavBar";
 
-import { FaCog, FaExclamationTriangle, FaFileExport } from "react-icons/fa";
+import { changeLanguage } from "i18next";
+import { useTranslation } from "react-i18next";
+import {
+  FaCog,
+  FaExclamationTriangle,
+  FaFileExport,
+  FaGlobeAfrica,
+} from "react-icons/fa";
 
 export const PageSettings = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -95,19 +103,22 @@ export const PageSettings = () => {
       <Content>
         <Flex align="center">
           <Icon as={FaCog} m="0 .5rem 1rem 0" boxSize="6" />
-          <Header>Settings</Header>
+          <Header>{t("settings.header")}</Header>
         </Flex>
-
         <Card m="0 0 1rem">
           <CardBody>
             <Flex align="center" m="0 0 1rem">
-              <Icon as={FaFileExport} m="0 .5rem 0 0 " />
+              <Icon as={FaGlobeAfrica} m="0 .5rem 0 0 " />
               <Heading as="h3" size="md">
-                Export
+                {t("settings.selectLangage")}
               </Heading>
             </Flex>
-            <Text m="0 0 1rem">Export the streak to CSV format</Text>
-            <Button onClick={handleExport}>Export streak</Button>
+            <Button m="0 1rem 0 0" onClick={() => changeLanguage("en")}>
+              {t("settings.languageEn")}
+            </Button>
+            <Button m="0 1rem 0 0" onClick={() => changeLanguage("sv")}>
+              {t("settings.languageSv")}
+            </Button>
           </CardBody>
         </Card>
         <Card m="0 0 1rem">
@@ -115,15 +126,26 @@ export const PageSettings = () => {
             <Flex align="center" m="0 0 1rem">
               <Icon as={FaFileExport} m="0 .5rem 0 0 " />
               <Heading as="h3" size="md">
-                Data dump
+                {t("settings.export")}
+              </Heading>
+            </Flex>
+            <Text m="0 0 1rem">{t("settings.exportHint")}</Text>
+            <Button onClick={handleExport}>{t("settings.exportBtn")}</Button>
+          </CardBody>
+        </Card>
+        <Card m="0 0 1rem">
+          <CardBody>
+            <Flex align="center" m="0 0 1rem">
+              <Icon as={FaFileExport} m="0 .5rem 0 0 " />
+              <Heading as="h3" size="md">
+                {t("settings.dataDump")}
               </Heading>
             </Flex>
 
-            <Text m="0 0 1rem">
-              Complete data-dump. Good for debugging if you want to complain to
-              the make of this app.
-            </Text>
-            <Button onClick={handleDataDump}>Dump data</Button>
+            <Text m="0 0 1rem">{t("settings.dataDumpHint")}</Text>
+            <Button onClick={handleDataDump}>
+              {t("settings.dataDumpBtn")}
+            </Button>
           </CardBody>
         </Card>
 
@@ -132,18 +154,18 @@ export const PageSettings = () => {
             <Flex align="center" m="0 0 1rem">
               <Icon as={FaExclamationTriangle} m="0 .5rem 0 0 " />
               <Heading as="h3" size="md">
-                Delete game
+                {t("settings.deleteGame")}
               </Heading>
             </Flex>
 
-            <Text m="0 0 1rem">
-              You can delete the current game if you want to restart.
-            </Text>
-            <Button onClick={handleClick}>Delete game</Button>
+            <Text m="0 0 1rem">{t("settings.deleteGameHint")}</Text>
+            <Button onClick={handleClick}>{t("settings.deleteGameBtn")}</Button>
           </CardBody>
         </Card>
 
-        <Text>app version: {`${process.env.REACT_APP_VERSION}`}</Text>
+        <Text>
+          {t("settings.appVersion")}: {`${process.env.REACT_APP_VERSION}`}
+        </Text>
 
         <AlertDialog
           isOpen={isOpen}
@@ -153,19 +175,17 @@ export const PageSettings = () => {
           <AlertDialogOverlay>
             <AlertDialogContent>
               <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Delete game
+                {t("settings.alertHeader")}
               </AlertDialogHeader>
 
-              <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
-              </AlertDialogBody>
+              <AlertDialogBody>{t("settings.alertBody")}</AlertDialogBody>
 
               <AlertDialogFooter>
                 <Button ref={cancelRef} onClick={onClose}>
-                  Cancel
+                  {t("settings.alertBtnCancel")}
                 </Button>
                 <Button colorScheme="red" onClick={deleteGame} ml={3}>
-                  Delete game
+                  {t("settings.alertBtnDelete")}
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>

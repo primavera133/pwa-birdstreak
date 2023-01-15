@@ -23,9 +23,12 @@ import { List } from "../List";
 import { LogForm } from "../LogForm";
 import { TooLate } from "../TooLate";
 
+import { useTranslation } from "react-i18next";
 export const LogBird = () => {
   const [noLogsUntilNextPeriod, setNoLogsUntilNextPeriod] = useState(false);
   const { checkInterval, singleDay } = useBirdStreakStore.getState();
+
+  const { t } = useTranslation();
 
   const birdy = getBirdy();
 
@@ -62,7 +65,7 @@ export const LogBird = () => {
         <Card m="0 0 2rem" bg="brand.infoBlock">
           <CardBody color="brand.infoBlockText">
             <Heading as="h3" size="lg">
-              You have logged {lastItem?.name} for this period.
+              {t("logBird.youHave", { birdName: lastItem?.name })}
             </Heading>
             <Box m="1rem 0">
               <img src={birdy} alt="birdy" width="200rem" />
@@ -71,14 +74,14 @@ export const LogBird = () => {
             {periodStart && (
               <>
                 <Text data-testid="next-period">
-                  Next period starts {format(periodStart, "d/M")}
+                  {t("logBird.nextPeriod", {
+                    period: format(periodStart, "d/M"),
+                  })}
                 </Text>
                 {!!hasUnNamedPeriods && (
                   <Flex align="center">
                     <Icon as={FaExclamation} />
-                    <Text>
-                      You still have {hasUnNamedPeriods} older periods to log!
-                    </Text>
+                    <Text>{t("logBird.remains", { hasUnNamedPeriods })}</Text>
                   </Flex>
                 )}
               </>
@@ -90,7 +93,7 @@ export const LogBird = () => {
           {!isTooLate && !!periodStart && (
             <>
               <Deadline />
-              <Header>Log your next bird</Header>
+              <Header>{t("logBird.header")}</Header>
               <Box m="1rem 0">
                 <img src={birdy} alt="birdy" width="200rem" />
               </Box>
@@ -100,12 +103,13 @@ export const LogBird = () => {
                   <>
                     <ListItemComponent>
                       <ListIcon as={FaCrow} key="1" />
-                      This period is {format(periodStart, "d/M")}.
+                      {t("logBird.thisPeriodSingle", {
+                        date: format(periodStart, "d/M"),
+                      })}
                     </ListItemComponent>
                     <ListItemComponent>
                       <ListIcon as={FaCrow} key="2" />
-                      When you have locked in on a bird you cannot add a new one
-                      until tomorrow.
+                      {t("logBird.whenSingle")}
                     </ListItemComponent>
                   </>
                 )}
@@ -113,17 +117,20 @@ export const LogBird = () => {
                   <>
                     <ListItemComponent>
                       <ListIcon as={FaCrow} key="1" />
-                      This period is {format(periodStart, "d/M")} to{" "}
-                      {format(deadline, "d/M")}.
+                      {t("logBird.thisPeriodMultiple", {
+                        from: format(periodStart, "d/M"),
+                        to: format(deadline, "d/M"),
+                      })}
                     </ListItemComponent>
                     <ListItemComponent>
                       <ListIcon as={FaCrow} key="2" />
-                      When you have locked in on a bird you cannot add a new one
-                      until next period starts.
+                      {t("logBird.whenMultiple")}
                     </ListItemComponent>
                     <ListItemComponent>
                       <ListIcon as={FaCrow} key="3" />
-                      Log next bird before end of {format(deadline, "d/M")}
+                      {t("logBird.nextMultiple", {
+                        deadline: format(deadline, "d/M"),
+                      })}
                     </ListItemComponent>
                   </>
                 )}
@@ -138,7 +145,7 @@ export const LogBird = () => {
         {lastItem ? (
           <>
             <Heading as="h3" size="lg" m="0 0 1rem">
-              Your list
+              {t("logBird.yourList")}
             </Heading>
             <List />
           </>

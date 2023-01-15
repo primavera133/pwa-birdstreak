@@ -8,6 +8,7 @@ import {
 } from "date-fns";
 import { subDays } from "date-fns/esm";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { GAME } from "../../config/game";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { normaliseName } from "../../logic/normaliseName";
@@ -19,6 +20,8 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
   const [nameError, setNameError] = useState("");
 
   const { streakSpan } = useBirdStreakStore.getState();
+
+  const { t } = useTranslation();
 
   const list = useBirdStreakStore((state) => state.list);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
@@ -135,14 +138,14 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
         m="0 0 1rem"
         display="inline-block"
       >
-        Bird name to log
+        {t("logForm.labelName")}
       </Box>
       <Input
         id="name"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Crow, Heron, etc"
+        placeholder={t("logForm.namePlaceholder") || ""}
         m="0 0 .5rem"
       />
       <Text color="brand.urgent" m="0 0 1rem">
@@ -156,9 +159,11 @@ export const LogForm = ({ onEditClose }: { onEditClose?: () => void }) => {
         m="0 0 5rem"
       >
         {trimmedName ? (
-          <Text>Lock in {trimmedName}</Text>
+          <Text>
+            {t("logForm.lockBtn")} {trimmedName}
+          </Text>
         ) : (
-          <Text>Lock in</Text>
+          <Text>{t("logForm.lockBtn")}</Text>
         )}
       </Button>
     </form>

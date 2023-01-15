@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { Content } from "../Content";
@@ -11,7 +12,9 @@ import { NavBar } from "../NavBar";
 export const MyList = () => {
   const list = useBirdStreakStore((state) => state.list);
   const hasRehydrated = useBirdStreakStore((state) => state.hasRehydrated);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (hasRehydrated && list.length === 0) {
@@ -24,7 +27,7 @@ export const MyList = () => {
     <Layout>
       <NavBar />
       <Content>
-        <Header>Your list</Header>
+        <Header>{t("myList.header")}</Header>
         <List />
       </Content>
       <Footer />
