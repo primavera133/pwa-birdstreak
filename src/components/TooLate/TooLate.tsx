@@ -22,6 +22,7 @@ import { LogForm } from "../LogForm";
 export const TooLate = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const singleDay = useBirdStreakStore((state) => state.singleDay);
   const deadline = useBirdStreakStore((state) => state.deadline);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
   const streakSpan = useBirdStreakStore((state) => state.streakSpan);
@@ -51,7 +52,8 @@ export const TooLate = () => {
           <Box>
             <>
               You missed to log a new bird in your last period (
-              {format(periodStart, "d/M")} - {format(deadline, "d/M")}).
+              {format(periodStart, "d/M")}
+              {!singleDay && <> - {format(deadline, "d/M")}</>}).
             </>
           </Box>
           <Box>
@@ -88,8 +90,15 @@ export const TooLate = () => {
           <ModalCloseButton />
           <ModalBody>
             <Box m="0 0 1rem">
-              Log your last period {format(periodStart, "d/M")} -{" "}
-              {format(deadline, "d/M")}
+              {singleDay && (
+                <>Log your missed day {format(periodStart, "d/M")}</>
+              )}
+              {!singleDay && (
+                <>
+                  Log your missed period {format(periodStart, "d/M")} -{" "}
+                  {format(deadline, "d/M")}
+                </>
+              )}
             </Box>
             <LogForm onEditClose={onClose} />
           </ModalBody>

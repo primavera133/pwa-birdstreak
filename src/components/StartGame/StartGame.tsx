@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Icon, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Icon,
+  Text,
+  useRadioGroup,
+} from "@chakra-ui/react";
 
 import {
   formatDuration,
@@ -16,10 +24,38 @@ import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBackfill } from "../../logic/getBackfill";
 import { Content } from "../Content";
 import { Header } from "../Header";
+import { RadioCard } from "../RadioCard";
+
+const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 export const StartGame = () => {
   const [startDate, setStartDate] = useState(new Date());
-  const { streakSpan } = useBirdStreakStore.getState();
+  const [streakSpan, setStreakSpan] = useState(2 * ONE_DAY_IN_MILLISECONDS);
+
+  const streakSpanOptions = [
+    { value: "1day", text: "Once a day" },
+    { value: "2days", text: "Every second day" },
+    { value: "weekly", text: "Weekly" },
+  ];
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: "streakspan",
+    defaultValue: "2days",
+    onChange: (value) => {
+      switch (value) {
+        case "1day":
+          setStreakSpan(1 * ONE_DAY_IN_MILLISECONDS);
+          break;
+        case "2days":
+          setStreakSpan(2 * ONE_DAY_IN_MILLISECONDS);
+          break;
+        case "weekly":
+          setStreakSpan(7 * ONE_DAY_IN_MILLISECONDS);
+          break;
+      }
+    },
+  });
+
+  const streakSpanGroup = getRootProps();
 
   const handleClick = () => {
     const gameStartDate = startOfDay(startDate);
@@ -42,6 +78,8 @@ export const StartGame = () => {
         : gameStartDate,
       list: periods,
       lastItem,
+      streakSpan,
+      singleDay: streakSpan === ONE_DAY_IN_MILLISECONDS,
     });
 
     // persist total state
@@ -64,12 +102,12 @@ export const StartGame = () => {
       </Box>
       <Text m="0 0 1rem">
         Welcome to start a streak game. It will start the day you press this
-        button. Every period is {formatted}
+        button. Every period is {formatted}.
       </Text>
       <Box m="0 0 1rem">
         <Box as="label" htmlFor="myDdatePicker">
           <Text as="span" fontWeight="bold" fontSize="xl">
-            Startdatum
+            Start date
           </Text>
         </Box>
         <Box m="0 0 .25rem 0">
@@ -98,6 +136,32 @@ export const StartGame = () => {
           </Text>
         </Flex>
       </Box>
+
+      <Box m="0 0 1rem">
+        <Box m="0 0 .5rem">
+          <Text as="span" fontWeight="bold" fontSize="xl">
+            Frequency
+          </Text>
+        </Box>
+
+        <HStack {...streakSpanGroup}>
+          {streakSpanOptions.map((option) => {
+            const radio = getRadioProps({
+              value: option.value,
+            });
+            return (
+              <RadioCard key={option.value} {...radio}>
+                {option.text}
+              </RadioCard>
+            );
+          })}
+        </HStack>
+        <Flex align="center">
+          <Icon as={FaCrow} m="0 .25rem 0" />
+          <Text as="span">Select how often you want to report.</Text>
+        </Flex>
+      </Box>
+
       <Button colorScheme="blue" onClick={handleClick} size="lg">
         Start a new streak
       </Button>

@@ -26,4 +26,5 @@ export type BirdStreakStore = {
   lastItem?: ListItem;
   hasRehydrated: boolean;
   editPeriod?: ListItem;
+  singleDay: boolean;
 };

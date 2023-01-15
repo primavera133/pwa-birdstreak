@@ -14,6 +14,7 @@ export const initialState: BirdStreakStore = {
   lastItem: undefined,
   hasRehydrated: false,
   editPeriod: undefined,
+  singleDay: false,
 };
 
 export const useBirdStreakStore = create<BirdStreakStore>(
