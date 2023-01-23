@@ -1,0 +1,98 @@
+{
+    "translation": {
+        "about": {
+            "rules": {
+                "header": "Regler",
+                "rule1": "Logga en ny fågel varje period.",
+                "rule2": "Du behöver ha sett fågel inom perioden i fråga.",
+                "rule3": "Om du inte sett en ny unik fågel innan perioden är slut är det game over."
+            },
+            "about": {
+                "header": "Om appen",
+                "text1": "Kodad av Jonas Myrenås. Rapportera buggar till",
+                "text2": "eller logga en issue i"
+            },
+            "birdLogoCredit": "Illustrationer och logga kommer från",
+            "log": {
+                "header": "Version log",
+                "current": "Nuvarande version av appen"
+            }
+        },
+        "settings": {
+            "header": "Inställningar",
+            "selectLanguage": "Välj språk",
+            "languageEn": "English",
+            "languageSv": "Svenska",
+            "export": "Exportera",
+            "exportHint": "Exportera din streak till CSV format",
+            "exportBtn": "Exportera",
+            "dataDump": "Data dump",
+            "dataDumpHint": "Komplett data-dump. Bra för debugging om du vill klaga hos tillverkaren av denna app. Skicka med den i ett email till birdstreak@gmail.com",
+            "dataDumpBtn": "Dumpa datan",
+            "deleteGame": "Starta om",
+            "deleteGameHint": "Du kan ta bort din nuvarande streak om du vill starta om.",
+            "deleteGameBtn": "Ta bort streak",
+            "appVersion": "Version av appen",
+            "alertHeader": "Starta om",
+            "alertBody": "Är du helt säker? Du kan inte ångra detta.",
+            "alertBtnCancel": "Nej, förresten",
+            "alertBtnDelete": "Ta bort streaken"
+        },
+        "startGame": {
+            "header": "Starta en streak",
+            "welcome": "Välkommen att starta en streak. Välj ett startdatum och hur ofta du vill logga. Varje period är {{formatted}}.",
+            "selectLanguage": "Välj språk",
+            "startDate": "Start datum",
+            "dateHint": "Du kan starta streaken idag eller på ett tidigare datum (och fylla i dina tidigare perioder).",
+            "frequency": "Frekvens",
+            "frequencyHint": "Välj hur ofta du vill logga.",
+            "buttonStart": "Starta en ny streak"
+        },
+        "logBird": {
+            "youHave": "Du har loggat {{birdName}} för denna perioden.",
+            "nextPeriod": "Nästa period startar {{ period }}",
+            "remains": "Du har fortfarande {{hasUnNamedPeriods}} äldre perioder att logga!",
+            "header": "Logga din nästa fågel",
+            "thisPeriodSingle": "Denna perioden är {{date}}.",
+            "whenSingle": "När du låst in en fågel kan du inte logga nästa förrän i morgon.",
+            "thisPeriodMultiple": "Denna perioden är  från {{from}} till {{to}}.",
+            "whenMultiple": "När du låst in en fågel kan du inte logga nästa förrän i nästa period startat.",
+            "nextMultiple": "Logga nästa fågel innan slutet av {{deadline}}",
+            "yourList": "Din lista"
+        },
+        "logForm": {
+            "labelName": "Fågel att logga",
+            "namePlaceholder": "Kråka, Gråhäger, etc",
+            "lockBtn": "Lås in"
+        },
+        "list": {
+            "soFar": "Hittills har du loggat {{p}}, över {{duration}}.",
+            "editPeriod": "Redigera period",
+            "close": "Stäng"
+        },
+        "deadline": {
+            "text": "Logga nästa fågel senast idag!"
+        },
+        "footer": {
+            "about": "Om appen",
+            "settigs": "inställningar"
+        },
+        "myList": {
+            "header": "Din lista"
+        },
+        "tooLate": {
+            "header": "Game over!",
+            "text": "Du missade att logga en fågel i din senaste period",
+            "goto": "Gå till",
+            "btnSettings": "Inställningar",
+            "goto2": "för att starta om Birdstreak.",
+            "cheat": "...eller så kan du",
+            "cheatBtn": "fuska",
+            "cheat2": "lite grand",
+            "modalHeader": "Så du vill fortsätta spela?",
+            "modalLogDay": "Logga din missadde dag",
+            "modalLogPeriod": "Logga din missade period",
+            "modalBtn": "Stäng"
+        }
+    }
+}

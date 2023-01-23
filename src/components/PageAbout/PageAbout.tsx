@@ -13,7 +13,11 @@ import { Header } from "../Header";
 import { Layout } from "../Layout";
 import { NavBar } from "../NavBar";
 
+import { useTranslation } from "react-i18next";
+
 export const PageAbout = () => {
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <NavBar />
@@ -21,24 +25,21 @@ export const PageAbout = () => {
         <Box m="0 0 2rem">
           <Flex align="center">
             <Icon as={FaBook} m="0 .5rem 1rem 0" boxSize="6" />
-            <Header>Rules</Header>
+            <Header>{t("about.rules.header")}</Header>
           </Flex>
           <UnorderedList>
-            <ListItem>Log a new bird every period.</ListItem>
-            <ListItem>You need to see the bird within the period.</ListItem>
-            <ListItem>
-              If you haven't seen any new birds when a period comes to it's end,
-              you are out.
-            </ListItem>
+            <ListItem>{t("about.rules.rule1")}</ListItem>
+            <ListItem>{t("about.rules.rule2")}</ListItem>
+            <ListItem>{t("about.rules.rule3")}</ListItem>
           </UnorderedList>
         </Box>
         <Box>
           <Flex align="center">
             <Icon as={FaStar} m="0 .5rem 1rem 0" boxSize="6" />
-            <Header>About</Header>
+            <Header>{t("about.about.header")}</Header>
           </Flex>
           <Text m="0 0 1rem">
-            Game coded by Jonas Myrenås. Report bugs to{" "}
+            {t("about.about.text1")}{" "}
             <Text
               as="a"
               textDecoration="underline"
@@ -46,7 +47,7 @@ export const PageAbout = () => {
             >
               birdstreak@gmail.com
             </Text>{" "}
-            or log an issue in{" "}
+            {t("about.about.text2")}{" "}
             <Text
               as="a"
               textDecoration="underline"
@@ -57,7 +58,7 @@ export const PageAbout = () => {
             </Text>
           </Text>
           <Text m="0 0 1rem">
-            Bird logo and illustrations from{" "}
+            {t("about.birdLogoCredit")}{" "}
             <Text
               as="a"
               textDecoration="underline"
@@ -70,12 +71,13 @@ export const PageAbout = () => {
         <Box>
           <Flex align="center">
             <Icon as={FaStar} m="0 .5rem 1rem 0" boxSize="6" />
-            <Header>Version log</Header>
+            <Header>{t("about.log.header")}</Header>
           </Flex>
 
           <Text m="0 0 1rem">
-            Current app version: {`${process.env.REACT_APP_VERSION}`}
+            {t("about.log.current")}: {`${process.env.REACT_APP_VERSION}`}
           </Text>
+          <Text m="0 0 1rem">0.5.0: Added Swedish translations.</Text>
           <Text m="0 0 1rem">
             0.4.0: Play with different streak periods. Once a day, every second
             day or weekly.

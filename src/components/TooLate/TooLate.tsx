@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { addMilliseconds, format, isBefore } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
 import { getBirdy } from "../../logic/getBirdy";
@@ -26,6 +27,8 @@ export const TooLate = () => {
   const deadline = useBirdStreakStore((state) => state.deadline);
   const periodStart = useBirdStreakStore((state) => state.periodStart);
   const streakSpan = useBirdStreakStore((state) => state.streakSpan);
+
+  const { t } = useTranslation();
 
   const birdy = getBirdy();
   const navigate = useNavigate();
@@ -44,40 +47,39 @@ export const TooLate = () => {
       <Card m="0 0 2rem" bg="brand.urgent">
         <CardBody color="brand.urgentText">
           <Heading as="h3" size="lg">
-            Game over!
+            {t("tooLate.header")}
           </Heading>
           <Box m="1rem 0">
             <img src={birdy} alt="birdy" width="200rem" />
           </Box>
           <Box>
             <>
-              You missed to log a new bird in your last period (
-              {format(periodStart, "d/M")}
+              {t("tooLate.text")} ({format(periodStart, "d/M")}
               {!singleDay && <> - {format(deadline, "d/M")}</>}).
             </>
           </Box>
           <Box>
-            Go to{" "}
+            {t("tooLate.goto")}{" "}
             <Button
               variant="link"
               onClick={() => navigate("/settings")}
               textDecoration="underline"
             >
-              Settings
+              {t("tooLate.btnSettings")}
             </Button>{" "}
-            to reset the game if you want to start a new one.
+            {t("tooLate.goto2")}
           </Box>
           {notTooLateToCheat && (
             <Box m="2rem 0 0">
-              ...or you could{" "}
+              {t("tooLate.cheat")}{" "}
               <Button
                 variant="link"
                 textDecoration="underline"
                 onClick={onOpen}
               >
-                cheat
+                {t("tooLate.cheatBtn")}
               </Button>{" "}
-              a bit
+              {t("tooLate.cheat2")}
             </Box>
           )}
         </CardBody>
@@ -86,16 +88,18 @@ export const TooLate = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>So you want to keep playing?</ModalHeader>
+          <ModalHeader>{t("tooLate.modalHeader")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box m="0 0 1rem">
               {singleDay && (
-                <>Log your missed day {format(periodStart, "d/M")}</>
+                <>
+                  {t("tooLate.modalLogDay")} {format(periodStart, "d/M")}
+                </>
               )}
               {!singleDay && (
                 <>
-                  Log your missed period {format(periodStart, "d/M")} -{" "}
+                  {t("tooLate.modalLogPeriod")} {format(periodStart, "d/M")} -{" "}
                   {format(deadline, "d/M")}
                 </>
               )}
@@ -105,7 +109,7 @@ export const TooLate = () => {
 
           <ModalFooter>
             <Button mr={3} onClick={onClose}>
-              Close
+              {t("tooLate.modalBtn")}
             </Button>
           </ModalFooter>
         </ModalContent>

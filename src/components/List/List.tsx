@@ -17,8 +17,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { format, formatDuration, intervalToDuration } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
+import { getLocale } from "../../logic/getLocale";
 import { ListItem } from "../../types";
 import { LogForm } from "../LogForm";
 
@@ -32,6 +34,8 @@ export const List = () => {
 
   const list = useBirdStreakStore((state) => state.list);
   const editPeriod = useBirdStreakStore((state) => state.editPeriod);
+
+  const { t, i18n } = useTranslation();
 
   const handleEdit = (key: string, i: number) => {
     const listItem = list.find((item) => item.key === key);
@@ -65,7 +69,12 @@ export const List = () => {
   return (
     <>
       <Text m="0 0 1rem" data-testid="so-far">
-        So far you've locked in {p}, over a total of {formatDuration(duration)}.
+        {t("list.soFar", {
+          p,
+          duration: formatDuration(duration, {
+            locale: getLocale(i18n.language),
+          }),
+        })}
       </Text>
 
       <ListComponent as="ul" data-testid="list">
@@ -117,7 +126,7 @@ export const List = () => {
           <ModalHeader>
             {editPeriod && (
               <>
-                Edit period {format(editPeriod.periodStart, "d/M")}
+                {t("list.editPeriod")} {format(editPeriod.periodStart, "d/M")}
                 {!singleDay && <> - {format(editPeriod.periodEnd, "d/M")}</>}
               </>
             )}
@@ -129,7 +138,7 @@ export const List = () => {
 
           <ModalFooter>
             <Button mr={3} onClick={onEditClose}>
-              Close
+              {t("list.close")}
             </Button>
           </ModalFooter>
         </ModalContent>
