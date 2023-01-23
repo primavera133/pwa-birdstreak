@@ -77,6 +77,7 @@ export const PageAbout = () => {
           <Text m="0 0 1rem">
             {t("about.log.current")}: {`${process.env.REACT_APP_VERSION}`}
           </Text>
+          <Text m="0 0 1rem">0.5.0: Added Swedish translations.</Text>
           <Text m="0 0 1rem">
             0.4.0: Play with different streak periods. Once a day, every second
             day or weekly.
