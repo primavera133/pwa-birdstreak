@@ -20,7 +20,7 @@
     },
     "settings": {
       "header": "Settings",
-      "selectLangage": "Select language",
+      "selectLanguage": "Select language",
       "languageEn": "English",
       "languageSv": "Svenska",
       "export": "Export",
@@ -41,6 +41,7 @@
     "startGame": {
       "header": "Start game",
       "welcome": "Welcome to start a streak game. Select a start date and how often you wan to log. Every period is {{formatted}}.",
+      "selectLanguage": "Select language",
       "startDate": "Start date",
       "dateHint": "You can start the game on today or a previous date (and backfill your sightings).",
       "frequency": "Frequency",

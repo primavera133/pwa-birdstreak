@@ -20,7 +20,7 @@
         },
         "settings": {
             "header": "Inställningar",
-            "selectLangage": "Välj språk",
+            "selectLanguage": "Välj språk",
             "languageEn": "English",
             "languageSv": "Svenska",
             "export": "Exportera",
@@ -41,6 +41,7 @@
         "startGame": {
             "header": "Starta en streak",
             "welcome": "Välkommen att starta en streak. Välj ett startdatum och hur ofta du vill logga. Varje period är {{formatted}}.",
+            "selectLanguage": "Välj språk",
             "startDate": "Start datum",
             "dateHint": "Du kan starta streaken idag eller på ett tidigare datum (och fylla i dina tidigare perioder).",
             "frequency": "Frekvens",

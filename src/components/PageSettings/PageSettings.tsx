@@ -97,6 +97,11 @@ export const PageSettings = () => {
     link.click();
   };
 
+  const handleChangeLanguage = (lang: "sv" | "en") => {
+    changeLanguage(lang);
+    localStorage.setItem(GAME.languageKey, lang);
+  };
+
   return (
     <Layout>
       <NavBar />
@@ -110,13 +115,13 @@ export const PageSettings = () => {
             <Flex align="center" m="0 0 1rem">
               <Icon as={FaGlobeAfrica} m="0 .5rem 0 0 " />
               <Heading as="h3" size="md">
-                {t("settings.selectLangage")}
+                {t("settings.selectLanguage")}
               </Heading>
             </Flex>
-            <Button m="0 1rem 0 0" onClick={() => changeLanguage("en")}>
+            <Button m="0 1rem 0 0" onClick={() => handleChangeLanguage("en")}>
               {t("settings.languageEn")}
             </Button>
-            <Button m="0 1rem 0 0" onClick={() => changeLanguage("sv")}>
+            <Button m="0 1rem 0 0" onClick={() => handleChangeLanguage("sv")}>
               {t("settings.languageSv")}
             </Button>
           </CardBody>

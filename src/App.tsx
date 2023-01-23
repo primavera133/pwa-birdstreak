@@ -11,7 +11,7 @@ import { useBirdStreakStore } from "./hooks/useBirdStreakStore";
 import { parseGame } from "./logic/parseGame";
 import { migrate } from "./migrations";
 // import * as testData from "./testData/birdStreakDataDump (10).json";
-import i18n from "i18next";
+import i18n, { changeLanguage } from "i18next";
 import { initReactI18next } from "react-i18next";
 import * as en from "./locales/en/messages.json";
 import * as sv from "./locales/sv/messages.json";
@@ -24,7 +24,7 @@ i18n
       en,
       sv,
     },
-    lng: "sv", // if you're using a language detector, do not define the lng option
+    // lng: "en", // if you're using a language detector, do not define the lng option
     fallbackLng: "en",
 
     interpolation: {
@@ -33,6 +33,11 @@ i18n
   });
 
 function App() {
+  const language = localStorage.getItem(GAME.languageKey);
+  if (language) {
+    changeLanguage(language);
+  }
+
   const appVersion = `${process.env.REACT_APP_VERSION}`;
   console.log("app version", appVersion);
 

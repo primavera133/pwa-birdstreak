@@ -19,6 +19,7 @@ import { useState } from "react";
 import { GAME } from "../../config/game";
 
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { changeLanguage } from "i18next";
 import { useTranslation } from "react-i18next";
 import { FaCrow } from "react-icons/fa";
 import { useBirdStreakStore } from "../../hooks/useBirdStreakStore";
@@ -99,14 +100,34 @@ export const StartGame = () => {
     locale: getLocale(i18n.language),
   });
 
+  const handleChangeLanguage = (lang: "sv" | "en") => {
+    changeLanguage(lang);
+    localStorage.setItem(GAME.languageKey, lang);
+  };
+
   return (
     <Content>
       <Header>{t("startGame.header")}</Header>
-      <Box m="1rem 0">
-        <img src="/bird2.webp" alt="birdy" width="200rem" />
+      <Box m="0 0 2rem">
+        <Box m="1rem 0">
+          <img src="/bird2.webp" alt="birdy" width="200rem" />
+        </Box>
+        <Text m="0 0 1rem">{t("startGame.welcome", { formatted })}</Text>
       </Box>
-      <Text m="0 0 1rem">{t("startGame.welcome", { formatted })}</Text>
       <Box m="0 0 1rem">
+        <Text as="span" fontWeight="bold" fontSize="xl">
+          {t("startGame.selectLanguage")}
+        </Text>
+      </Box>
+      <Box m="0 0 2rem">
+        <Button m="0 1rem 0 0" onClick={() => handleChangeLanguage("en")}>
+          {t("settings.languageEn")}
+        </Button>
+        <Button m="0 1rem 0 0" onClick={() => handleChangeLanguage("sv")}>
+          {t("settings.languageSv")}
+        </Button>
+      </Box>
+      <Box m="0 0 2rem">
         <Box as="label" htmlFor="myDdatePicker">
           <Text as="span" fontWeight="bold" fontSize="xl">
             {t("startGame.startDate")}
